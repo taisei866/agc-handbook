@@ -1,0 +1,1350 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>アコサー部員ハンドブック</title>
+<meta name="description" content="室蘭工業大学 アコースティックギターサークルの部員向けサイト。スタジオ予約、ライブエントリー、印刷室の使い方、メンバー募集掲示板など。">
+<meta property="og:title" content="アコサー部員ハンドブック">
+<meta property="og:description" content="室蘭工業大学 アコースティックギターサークルの部員向けお役立ちサイト">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#2f4a3e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232f4a3e'/%3E%3Cg stroke='%23e0a646' stroke-width='1.6'%3E%3Cpath d='M9 6v20M13 6v20M17 6v20M21 6v20'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=M+PLUS+1+Code:wght@500&display=swap">
+<style>
+/* Layout: 弦をモチーフにした区切り線＋フレット番号風のセクション見出し、1カラムの読み物 */
+:root{
+  --bg:#f3f5f1; --surface:#ffffff; --fg:#1d2a24; --muted:#5d6b64;
+  --accent:#b07a1e; --accent-ink:#7a520c; --wood:#2f4a3e; --line:#d6ddd7;
+  --todo-bg:#fff4d6; --todo-fg:#7a520c;
+  --display:"Dela Gothic One","Zen Kaku Gothic New",system-ui,sans-serif;
+  --body:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --mono:"M PLUS 1 Code",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121a17; --surface:#1a2420; --fg:#e7ece9; --muted:#9aa9a1;
+  --accent:#e0a646; --accent-ink:#f0c47a; --wood:#a9c7b8; --line:#2c3a34;
+  --todo-bg:#3a2e14; --todo-fg:#f0c47a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121a17; --surface:#1a2420; --fg:#e7ece9; --muted:#9aa9a1;
+  --accent:#e0a646; --accent-ink:#f0c47a; --wood:#a9c7b8; --line:#2c3a34;
+  --todo-bg:#3a2e14; --todo-fg:#f0c47a; color-scheme:dark}
+
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.8;overflow-wrap:break-word;word-break:auto-phrase;line-break:strict}
+.org{display:grid;gap:2px;background:var(--bg);border-radius:6px;padding:10px 12px;margin-top:6px}
+.org small{color:var(--muted);font-size:.78rem}
+.org strong{font-size:.95rem;line-height:1.5}
+.org strong span{display:inline-block}
+.quick td:nth-child(2){white-space:nowrap}
+.wrap{max-width:720px;margin:0 auto;padding-inline:16px;padding-block:32px 64px}
+h1,h2{font-family:var(--display);font-weight:400;text-wrap:balance;line-height:1.3;margin:0}
+h3{font-size:1.05rem;line-height:1.5;margin:0}
+p{margin:0}
+a{color:var(--accent-ink)}
+
+header{display:grid;gap:12px;padding-block:8px 24px}
+.eyebrow{font-size:.8rem;font-weight:700;letter-spacing:.08em;color:var(--accent-ink)}
+h1{font-size:clamp(1.8rem,7vw,2.6rem);color:var(--wood)}
+.lead{color:var(--muted)}
+
+/* 6本の弦 */
+.strings{display:grid;gap:5px;margin-block:8px 4px}
+.strings i{display:block;height:1px;background:var(--line)}
+.strings i:nth-child(n+4){background:color-mix(in srgb,var(--accent) 55%,var(--line))}
+.strings i:nth-child(5){height:2px}.strings i:nth-child(6){height:3px}
+
+nav{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.chip{font-size:.9rem;font-weight:700;color:var(--wood);text-decoration:none;border:1.5px solid var(--wood);border-radius:999px;padding:4px 14px}
+.chip:hover,.chip:focus-visible{background:var(--wood);color:var(--bg);outline:none}
+
+section{display:grid;gap:16px;padding-block:40px 8px;scroll-margin-top:12px;min-width:0}
+.sec-head{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 14px}
+.fret{font-family:var(--mono);font-size:.8rem;color:var(--accent-ink);border:1px solid var(--accent);border-radius:4px;padding:0 8px;flex-shrink:0}
+h2{font-size:1.5rem}
+
+/* 手順リスト：直下の li だけに番号を付ける */
+ol.steps{list-style:none;margin:0;padding:0;display:grid;counter-reset:s}
+ol.steps > li{counter-increment:s;display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;padding-block:12px;border-bottom:1px dashed var(--line)}
+ol.steps > li:last-child{border-bottom:0}
+ol.steps > li::before{content:counter(s);font-family:var(--mono);width:28px;height:28px;border-radius:50%;background:var(--wood);color:var(--bg);display:grid;place-items:center;font-size:.85rem;margin-top:2px}
+ol.steps > li > div{min-width:0;display:grid;gap:4px}
+
+ul.rules{margin:0;padding-left:1.2em;display:grid;gap:2px}
+ul.rules li{padding-left:2px}
+.note{background:var(--surface);border-left:3px solid var(--accent);padding:12px 16px;font-size:.95rem}
+.todo{background:var(--todo-bg);color:var(--todo-fg);border-radius:3px;padding:0 5px;font-weight:500}
+.num{font-family:var(--mono);font-weight:500;user-select:all;background:var(--bg);padding:0 6px;border-radius:3px;white-space:nowrap}
+
+/* スタジオ早見表 */
+.tbl-wrap{overflow-x:auto;min-width:0}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:500;font-size:.8rem;white-space:nowrap}
+.quick td:first-child{font-weight:700;white-space:nowrap}
+.quick td:first-child a{color:var(--wood)}
+.tnum{font-variant-numeric:tabular-nums}
+
+.studios{display:grid;gap:20px}
+.studio{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 18px;display:grid;gap:14px;min-width:0;scroll-margin-top:12px}
+.studio h3.name{font-family:var(--display);font-weight:400;font-size:1.35rem;color:var(--wood)}
+.sub{font-size:.85rem;color:var(--muted)}
+.feature{font-weight:500}
+.facts{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 16px;font-size:.93rem}
+.facts dt{color:var(--muted);white-space:nowrap}.facts dd{margin:0;min-width:0}
+.warn{font-size:.9rem;border-left:3px solid var(--accent);padding-left:12px}
+.studio h4{font-size:1rem;margin:0}
+
+.tabs{display:flex;border-bottom:2px solid var(--line)}
+.tabs button{font:inherit;font-weight:700;background:none;border:0;color:var(--muted);padding:8px 18px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px}
+.tabs button[aria-selected="true"]{color:var(--wood);border-bottom-color:var(--accent)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.profile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;gap:18px;align-items:center}
+.avatar{flex-shrink:0;width:72px;height:72px;border-radius:50%;background:var(--wood);color:var(--bg);display:grid;place-items:center;font-family:var(--display);font-size:1.8rem}
+.profile > div{min-width:0;display:grid;gap:2px}
+.profile .pname{font-size:1.4rem}
+
+.hours{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 16px;font-size:.95rem}
+.hours dt{color:var(--muted)}.hours dd{margin:0;font-variant-numeric:tabular-nums}
+
+.consult{background:var(--wood);color:var(--bg);border-radius:10px;padding:22px 20px;display:grid;gap:12px}
+.consult p{opacity:.92}
+.btn{justify-self:start;font-weight:700;text-decoration:none;background:var(--accent);color:#1d2a24;border-radius:999px;padding:8px 22px}
+.btn:hover,.btn:focus-visible{filter:brightness(1.08);outline:2px solid var(--bg);outline-offset:2px}
+
+/* 掲示板 */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.beta{font-size:.72rem;font-weight:700;color:var(--accent-ink);border:1px solid var(--accent);border-radius:999px;padding:0 9px;align-self:center}
+.board-tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.seg{display:flex;border:1.5px solid var(--wood);border-radius:999px;overflow:hidden}
+.seg button{font:inherit;font-size:.85rem;font-weight:700;background:none;border:0;color:var(--wood);padding:5px 12px;cursor:pointer}
+.seg button+button{border-left:1.5px solid var(--wood)}
+.seg button[aria-pressed="true"]{background:var(--wood);color:var(--bg)}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+select,input,textarea{font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 10px;max-width:100%;box-sizing:border-box}
+input,textarea{width:100%}
+select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+textarea{resize:vertical;line-height:1.6}
+button.btn{border:0;cursor:pointer;font:inherit;font-weight:700}
+button.btn[disabled]{opacity:.6;cursor:default}
+button.chip{background:none;cursor:pointer;font-family:inherit}
+.post-form{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;gap:14px}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+legend,.field > label{font-size:.85rem;font-weight:700;color:var(--muted);padding:0;margin-bottom:6px}
+.field{display:grid;gap:0}
+.kind-pick{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.kind-pick legend{grid-column:1/-1}
+.kind-pick label{display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:center;border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-weight:700;cursor:pointer}
+.kind-pick label:has(input:checked){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface))}
+.kind-pick small{grid-column:2;font-weight:400;font-size:.78rem;color:var(--muted)}
+.kind-pick input{width:auto}
+.checks{display:flex;flex-wrap:wrap;gap:6px}
+.checks label{display:flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:999px;padding:3px 12px;font-size:.88rem;cursor:pointer}
+.checks label:has(input:checked){border-color:var(--wood);background:var(--wood);color:var(--bg)}
+.checks input{width:auto;margin:0}
+.form-error{color:var(--accent-ink);font-weight:700;font-size:.9rem}
+.form-error:empty{display:none}
+.form-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.board-status{color:var(--muted);font-size:.92rem}
+.board-status:empty{display:none}
+.posts{display:grid;gap:12px}
+.post{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 16px 14px;display:grid;gap:8px;min-width:0}
+.post.closed{opacity:.6}
+.post-top{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.kind{font-size:.75rem;font-weight:700;border-radius:4px;padding:1px 8px}
+.kind.recruit{background:var(--wood);color:var(--bg)}
+.kind.join{border:1px solid var(--wood);color:var(--wood)}
+.state{font-size:.75rem;font-weight:700;color:var(--muted);border:1px dashed var(--muted);border-radius:4px;padding:0 7px}
+.post h3{font-size:1.05rem}
+.parts{display:flex;flex-wrap:wrap;gap:4px}
+.parts span{font-size:.78rem;background:var(--bg);border-radius:999px;padding:1px 10px}
+.post-body{white-space:pre-wrap;font-size:.95rem}
+.post-contact{font-size:.9rem}
+.post-contact b{color:var(--muted);font-weight:500}
+.post-meta{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;justify-content:space-between;font-size:.8rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:8px}
+.post-actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.post-actions button{font:inherit;font-size:.8rem;font-weight:700;background:none;border:1px solid var(--line);color:var(--fg);border-radius:999px;padding:2px 12px;cursor:pointer}
+.post-actions button.danger{border-color:var(--accent);color:var(--accent-ink)}
+.post-actions button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:20px;text-align:center;color:var(--muted)}
+
+/* パネル */
+.tab-beta{font-size:.68rem;color:var(--accent-ink);margin-left:3px;vertical-align:super}
+.panel > section{padding-block:24px 8px}
+.panel > section + section{padding-top:40px}
+.studio{scroll-margin-top:64px}
+.news-date{font-size:.8rem;color:var(--muted)}
+.news-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.news-links .btn{padding:6px 18px;font-size:.92rem}
+.news-actions{justify-content:flex-end;border-top:1px dashed var(--line);padding-top:8px}
+.link-row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:6px;margin-bottom:6px}
+@media (max-width:480px){.link-row{grid-template-columns:1fr}}
+header{padding-bottom:16px}
+/* メニュー */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);margin-inline:-16px;padding:8px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+.menu-btn{display:flex;align-items:center;gap:6px;font:inherit;font-size:.85rem;font-weight:700;color:var(--wood);background:none;border:1.5px solid var(--wood);border-radius:8px;padding:5px 12px 5px 8px;cursor:pointer}
+.menu-btn svg,.menu-close svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.menu-btn:focus-visible,.menu-close:focus-visible,.menu a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.current-title{font-size:1rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.menu-backdrop{position:fixed;inset:0;z-index:20;background:color-mix(in srgb,#000 45%,transparent)}
+.menu{position:fixed;top:0;bottom:0;left:0;z-index:21;width:min(84vw,320px);background:var(--surface);border-right:1px solid var(--line);padding:calc(env(safe-area-inset-top,0px) + 12px) 12px calc(env(safe-area-inset-bottom,0px) + 16px);overflow-y:auto;display:grid;align-content:start;gap:8px;box-shadow:4px 0 24px color-mix(in srgb,#000 25%,transparent)}
+@media (prefers-reduced-motion:no-preference){.menu:not([hidden]){animation:menuin .18s ease-out}}
+@keyframes menuin{from{transform:translateX(-24px);opacity:.4}to{transform:none;opacity:1}}
+.menu-head{display:flex;justify-content:space-between;align-items:center;padding:4px 4px 8px 8px;font-size:.8rem;font-weight:700;letter-spacing:.08em;color:var(--muted)}
+.menu-close{background:none;border:0;color:var(--fg);padding:6px;border-radius:6px;cursor:pointer;display:grid}
+.menu ul{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.menu a{display:grid;gap:0;text-decoration:none;color:var(--fg);border-radius:8px;padding:10px 12px;border-left:3px solid transparent}
+.menu a b{font-size:1rem}
+.menu a small{font-size:.78rem;color:var(--muted)}
+.menu a:hover{background:var(--bg)}
+.menu a[aria-current="page"]{background:var(--bg);border-left-color:var(--accent)}
+.menu a[aria-current="page"] b{color:var(--wood)}
+.menu .tab-beta{font-style:normal}
+/* 画像・日記 */
+.news-img{display:block;width:100%;max-width:100%;height:auto;border-radius:8px;border:1px solid var(--line)}
+.img-preview{display:grid;gap:8px;justify-items:start;margin-top:8px}
+.img-preview img{max-width:100%;max-height:220px;border-radius:6px;border:1px solid var(--line)}
+input[type="file"]{border-style:dashed;padding:8px}
+.hint{font-size:.78rem;color:var(--muted);margin-top:4px}
+.bk-lock{display:grid;gap:8px;justify-items:start}
+.bk-pass{display:grid;gap:6px;width:100%;max-width:320px}
+.bk-pass label{font-size:.85rem;font-weight:700;color:var(--muted)}
+.pass-row{display:flex;gap:8px}
+.pass-row input{flex:1;min-width:0}
+.pass-row .btn{padding:6px 18px;flex-shrink:0}
+.bk-list{display:grid}
+.bk-item{display:grid;gap:4px;padding-block:14px;border-bottom:1px dashed var(--line)}
+.bk-item:last-child{border-bottom:0}
+.bk-time{font-family:var(--mono);font-size:.78rem;color:var(--accent-ink);font-variant-numeric:tabular-nums}
+.bk-item .post-actions{justify-content:flex-end}
+/* おみくじ */
+.omk-stage{display:grid;justify-items:center;gap:16px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:32px 16px 24px}
+.omk-box{position:relative;width:84px;height:128px;border-radius:10px 10px 6px 6px;background:var(--wood);color:var(--bg);display:grid;place-items:center;box-shadow:inset 0 -10px 0 color-mix(in srgb,#000 18%,transparent);transform-origin:50% 90%}
+.omk-box::before{content:"";position:absolute;top:-14px;left:50%;width:6px;height:20px;margin-left:-3px;background:var(--accent);border-radius:2px}
+.omk-box span{writing-mode:vertical-rl;font-family:var(--display);font-size:.95rem;letter-spacing:.08em;margin-bottom:8px}
+.omk-stage .btn{justify-self:center}
+.drawn .omk-box{opacity:.45}
+.omk-note{color:var(--muted);font-size:.88rem;text-align:center}
+.omk-note:empty{display:none}
+.omk-result{background:var(--surface);border:2px solid var(--wood);border-radius:12px;padding:22px 18px;display:grid;gap:10px;text-align:center;outline:none}
+.omk-date{font-family:var(--mono);font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.omk-fortune{font-family:var(--display);font-size:3.2rem;line-height:1.1;color:var(--wood)}
+.omk-fortune.great{color:var(--accent-ink)}
+.omk-msg{font-weight:500}
+.omk-rows{text-align:left;margin:6px 0 0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 14px;font-size:.93rem;border-top:1px dashed var(--line);padding-top:14px}
+.omk-rows dt{color:var(--muted);white-space:nowrap}
+.omk-rows dd{margin:0;min-width:0}
+@media (prefers-reduced-motion:no-preference){
+  .shaking .omk-box{animation:omkshake .3s ease-in-out 3}
+  .omk-result.reveal{animation:omkin .45s ease-out}
+}
+@keyframes omkshake{0%,100%{transform:rotate(0)}25%{transform:rotate(-14deg)}75%{transform:rotate(14deg)}}
+@keyframes omkin{from{transform:translateY(10px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+footer{margin-top:48px;color:var(--muted);font-size:.85rem;display:grid;gap:6px}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0}
+img{max-width:100%}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.link-btn{font:inherit;font-size:.85rem;color:var(--muted);background:none;border:0;padding:0;text-decoration:underline;cursor:pointer}
+.admin-dialog{box-sizing:border-box;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--fg);padding:20px;width:min(calc(100vw - 32px),380px);max-width:none}
+.admin-dialog::backdrop{background:color-mix(in srgb,#000 45%,transparent)}
+.admin-dialog form{display:grid;gap:12px;justify-items:start}
+.admin-dialog .pass-row{width:100%}
+.admin-dialog h3{font-size:1.1rem}
+</style>
+</head>
+<body>
+
+<div class="wrap" lang="ja">
+  <header>
+    <span class="eyebrow">室蘭工業大学 アコースティックギターサークル</span>
+    <h1>部員ハンドブック</h1>
+    <p class="lead">練習・ライブ・設備のことで迷ったら、まずここを見てください。</p>
+    <div class="strings" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </header>
+
+<div class="topbar">
+  <button type="button" id="menu-btn" class="menu-btn" aria-expanded="false" aria-controls="menu" aria-label="メニューを開く">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    <span>メニュー</span>
+  </button>
+  <strong id="current-title" class="current-title">お知らせ</strong>
+</div>
+<div class="menu-backdrop" id="menu-backdrop" hidden></div>
+<nav class="menu" id="menu" aria-label="メニュー" hidden>
+  <div class="menu-head">
+    <span>メニュー</span>
+    <button type="button" id="menu-close" class="menu-close" aria-label="メニューを閉じる">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <ul>
+    <li><a href="#news" data-panel="news"><b>お知らせ</b><small>お知らせ・お役立ち情報</small></a></li>
+    <li><a href="#studio" data-panel="studio"><b>スタジオ予約</b><small>きらん・ソリスト・エルム楽器</small></a></li>
+    <li><a href="#live" data-panel="live"><b>ライブエントリー</b><small>内部ライブ・外部ライブ</small></a></li>
+    <li><a href="#print" data-panel="print"><b>印刷室</b><small>申請方法・利用時間・ルール</small></a></li>
+    <li><a href="#board" data-panel="board"><b>メンバー募集 <i class="tab-beta">β</i></b><small>バンドメンバー募集掲示板</small></a></li>
+    <li><a href="#about" data-panel="about"><b>部長・お悩み相談</b><small>部長の紹介と相談フォーム</small></a></li>
+    <li><a href="#omikuji" data-panel="omikuji"><b>アコサーおみくじ</b><small>1日1回、今日の運勢を占う</small></a></li>
+    <li><a href="#boyaki" data-panel="boyaki"><b>管理人のアコサー日記</b><small>管理人のゆるい日々の記録</small></a></li>
+  </ul>
+</nav>
+
+  <div class="panel" id="p-news">
+  <section id="news">
+    <div class="sec-head"><h2>お知らせ・お役立ち情報</h2></div>
+    <div class="board-tools">
+      <div class="seg news-seg" role="group" aria-label="種類で絞り込む">
+        <button type="button" data-cat="all" aria-pressed="true">すべて</button>
+        <button type="button" data-cat="info" aria-pressed="false">お知らせ</button>
+        <button type="button" data-cat="tips" aria-pressed="false">お役立ち</button>
+      </div>
+    </div>
+    <button type="button" id="news-new" class="btn" hidden>お知らせを書く</button>
+    <form id="news-form" class="post-form" hidden novalidate>
+      <fieldset class="kind-pick">
+        <legend>種類</legend>
+        <label><input type="radio" name="ncat" id="n-cat-info" value="info" checked> お知らせ<small>予定や連絡事項</small></label>
+        <label><input type="radio" name="ncat" id="n-cat-tips" value="tips"> お役立ち<small>知っておくと便利なこと</small></label>
+      </fieldset>
+      <div class="field"><label for="n-title">タイトル</label><input id="n-title" maxlength="60"></div>
+      <div class="field"><label for="n-body">本文</label><textarea id="n-body" rows="6" maxlength="2000"></textarea></div>
+      <div class="field">
+        <label for="n-image">画像（任意・1枚）</label>
+        <input id="n-image" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+        <div id="n-preview" class="img-preview" hidden>
+          <img id="n-preview-img" alt="選んだ画像のプレビュー">
+          <button type="button" id="n-image-clear" class="chip">画像を外す</button>
+        </div>
+        <small class="hint">大きい画像は自動で縮小して保存されます。</small>
+      </div>
+      <fieldset class="field">
+        <legend>リンク（任意・2つまで）</legend>
+        <div class="link-row"><input id="n-l1-label" maxlength="30" placeholder="ボタンの文字（例：動画を見る）"><input id="n-l1-url" inputmode="url" placeholder="https://"></div>
+        <div class="link-row"><input id="n-l2-label" maxlength="30" placeholder="ボタンの文字"><input id="n-l2-url" inputmode="url" placeholder="https://"></div>
+      </fieldset>
+      <p class="form-error" id="news-error" role="alert"></p>
+      <div class="form-actions">
+        <button type="submit" class="btn" id="n-submit">投稿する</button>
+        <button type="button" class="chip" id="n-cancel">キャンセル</button>
+      </div>
+    </form>
+    <p id="news-status" class="board-status" role="status">お知らせを読み込んでいます…</p>
+    <div id="news-list" class="posts"></div>
+  </section>
+  </div>
+
+  <div class="panel" id="p-studio" hidden>
+  <section id="studio">
+    <div class="sec-head"><h2>練習スタジオの予約方法</h2></div>
+    <p>部員がよく使う練習場所は3か所です。まずは早見表で選んで、詳しい予約手順は各スタジオの欄を見てください。</p>
+
+    <div class="tbl-wrap">
+      <table class="quick">
+        <thead><tr><th>スタジオ</th><th>料金</th><th>予約方法</th></tr></thead>
+        <tbody>
+          <tr><td><a href="#kiran">きらん</a></td><td class="tnum">1室 960円〜</td><td>電話＋窓口で前払い</td></tr>
+          <tr><td><a href="#soliste">ソリスト</a></td><td class="tnum">1人1時間 500円</td><td>LINE</td></tr>
+          <tr><td><a href="#elm">エルム楽器</a></td><td><span class="todo">要確認</span></td><td>電話</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="studios">
+      <article class="studio" id="kiran">
+        <div><h3 class="name">きらん</h3><p class="sub">室蘭市生涯学習センター／中島町2-22-1</p></div>
+        <p class="feature">とにかく広く、3か所の中で料金がいちばん安く済みます。</p>
+        <div class="tbl-wrap"><table>
+          <thead><tr><th>時間帯</th><th>時間</th><th>料金（1室）</th></tr></thead>
+          <tbody class="tnum">
+            <tr><td>午前</td><td>9:00〜12:00</td><td>960円</td></tr>
+            <tr><td>午後</td><td>13:00〜17:00</td><td>1,280円</td></tr>
+            <tr><td>夜間</td><td>18:00〜22:00</td><td>1,280円</td></tr>
+          </tbody>
+        </table></div>
+        <ol class="steps">
+          <li><div><h4>空き状況を確認</h4><p><a href="https://yoyacool.e-harp.jp/muroran/FacilityAvailability/Index/012050/2060?rc=120&amp;ptn=1&amp;d=2026-10-11T00%3A00%3A00&amp;sd=2026-09-27&amp;ed=2026-10-31" target="_blank" rel="noopener">空き状況のページ</a>で、使いたい日の空きを確認します。</p></div></li>
+          <li><div><h4>電話で予約</h4><p><span class="num">0143-83-7750</span> に電話し、次のことを伝えます。</p>
+            <ul class="rules">
+              <li>音楽スタジオを使いたいこと</li>
+              <li>使いたい日にち</li>
+              <li>時間帯（午前・午後・夜間）</li>
+              <li>使用団体名</li>
+            </ul>
+            <p class="org"><small>使用団体名はこう伝えます</small><strong><span>室蘭工業大学</span> <span>アコースティックギターサークル</span></strong></p></div></li>
+          <li><div><h4>窓口で前払い</h4><p>使う日の2〜3日前までに、きらんの窓口へ直接行って料金を支払います。</p></div></li>
+        </ol>
+        <p class="warn">料金は前払いが必要です。予約したら、支払いに行く日も決めておきましょう。</p>
+        <a class="chip" style="justify-self:start" href="https://maps.app.goo.gl/hdue38Ww71BcwaAt5" target="_blank" rel="noopener">地図を開く</a>
+      </article>
+
+      <article class="studio" id="soliste">
+        <div><h3 class="name">ソリスト</h3><p class="sub">ライブハウス 室蘭Soliste／中島町1-24-11</p></div>
+        <p class="feature">機材が良く、ライブハウスのステージの上で練習できるので本番の感覚をつかめます。空いていることが多く、急に練習したいときにも頼れます。</p>
+        <dl class="facts">
+          <dt>料金</dt><dd>1人1時間 500円</dd>
+          <dt>利用時間</dt><dd>月〜金 20:00〜23:00</dd>
+          <dt>使えない日</dt><dd>第1・3・5木曜日。祝日やそれ以外の日も、借りられるか事前に確認してください</dd>
+        </dl>
+        <ol class="steps">
+          <li><div><h4>LINEを友だち追加</h4><p><a href="https://www.cafe-soliste.com/top3.html" target="_blank" rel="noopener">ソリストのスタジオページ</a>に載っているLINEを友だち追加します。</p></div></li>
+          <li><div><h4>予約内容を送る</h4><p>LINEで次の内容を送ります。</p>
+            <ul class="rules">
+              <li>代表者の氏名・年齢・電話番号</li>
+              <li>人数と、全員の氏名・年齢</li>
+              <li>使用する楽器</li>
+              <li>利用したい日時</li>
+              <li>簡易PAかフルPAか</li>
+            </ul></div></li>
+        </ol>
+        <p class="warn">準備と片付けも利用時間に含まれます。入室は開始10分前からです。</p>
+        <a class="chip" style="justify-self:start" href="https://maps.app.goo.gl/69TH8qKDkuZcJ6v39" target="_blank" rel="noopener">地図を開く</a>
+      </article>
+
+      <article class="studio" id="elm">
+        <div><h3 class="name">エルム楽器</h3><p class="sub">エルム楽器 室蘭支店のレンタルスタジオ／中島町1-19-2</p></div>
+        <p class="feature">楽器屋さんのスタジオなので、機材を見るついでに使えます。料金は高めで、かなり狭いため5人以上での利用はおすすめしません。</p>
+        <dl class="facts">
+          <dt>料金</dt><dd><span class="todo">要確認</span></dd>
+          <dt>利用時間</dt><dd>平日（水曜除く）11:00〜19:00<br>土日祝 10:00〜18:00</dd>
+        </dl>
+        <ol class="steps">
+          <li><div><h4>電話で予約</h4><p><span class="num">0143-46-1131</span> に電話し、レンタルスタジオを予約したいことと、使いたい日時を伝えます。</p></div></li>
+        </ol>
+        <a class="chip" style="justify-self:start" href="https://maps.app.goo.gl/uk2vWu1L3kWenwpy6" target="_blank" rel="noopener">地図を開く</a>
+      </article>
+    </div>
+  </section>
+  </div>
+
+  <div class="panel" id="p-live" hidden>
+  <section id="live">
+    <div class="sec-head"><h2>ライブへのエントリー方法</h2></div>
+    <div class="seg live-seg" role="group" aria-label="ライブの種類">
+      <button type="button" data-live="panel-in" aria-pressed="true">内部ライブ</button>
+      <button type="button" data-live="panel-out" aria-pressed="false">外部ライブ</button>
+    </div>
+    <div id="panel-in">
+      <ol class="steps">
+        <li><div><h3>告知を確認する</h3><p>定期ライブなどの日程とエントリー受付は、部のLINEグループでお知らせします。</p></div></li>
+        <li><div><h3>エントリーする</h3><p>LINEのノートへの書き込みや、告知メッセージへのリアクションなど、告知で案内された方法でエントリーします。</p></div></li>
+        <li><div><h3>セトリと機材を提出</h3><p>出演が決まったら、本番の1週間前くらいまでにセットリストと使用機材を提出してください。</p></div></li>
+      </ol>
+    </div>
+    <div id="panel-out" hidden>
+      <ol class="steps">
+        <li><div><h3>出たいイベントを見つける</h3><p>ライブハウスやイベントの募集は、各会場のSNSや出演者募集ページで探せます。</p></div></li>
+        <li><div><h3>経験者に聞いてみる</h3><p>サークルへの相談は不要です。ただ、その会場やイベントに出たことのある部員に話を聞いておくと、準備がスムーズに進みます。</p></div></li>
+        <li><div><h3>主催者に申し込む</h3><p>主催者の指定する方法で申し込みます。チケットノルマや出演費の有無は、事前に必ず確認しましょう。</p></div></li>
+        <li><div><h3>当日までの準備</h3><p>持ち込む機材、入り時間、物販ができるかどうかを主催者と確認しておきます。</p></div></li>
+      </ol>
+    </div>
+  </section>
+  </div>
+
+  <div class="panel" id="p-print" hidden>
+  <section id="print">
+    <div class="sec-head"><h2>印刷室の利用方法</h2></div>
+    <p>印刷室は学内の施設を、ご厚意で練習場所として使わせていただいています。ほかの利用者の方への配慮を最優先にしてください。</p>
+    <ol class="steps">
+      <li><div><h3>管理人の田村さんに事前申請</h3><p>使いたい日が決まったら、印刷室の管理人の田村さんに事前に申請してください。鍵の受け渡し方法は、申請のときに教えていただけます。</p></div></li>
+      <li><div><h3>利用できる時間内に使う</h3>
+        <dl class="hours">
+          <dt>平日</dt><dd>10:00〜21:00</dd>
+          <dt>土曜日</dt><dd>10:00〜19:00</dd>
+          <dt>日曜・祝日</dt><dd>利用できません</dd>
+        </dl></div></li>
+      <li><div><h3>使い終わったら</h3><p>机や椅子を元の配置に戻し、施錠してから鍵を指定の場所に返却します。</p></div></li>
+    </ol>
+    <div class="note">
+      <ul class="rules">
+        <li>アンプは使用できます</li>
+        <li>飲食もできます</li>
+        <li>印刷機や備品には触れないでください</li>
+      </ul>
+    </div>
+  </section>
+  </div>
+
+  <div class="panel" id="p-board" hidden>
+  <section id="board">
+    <div class="sec-head"><h2>バンドメンバー募集掲示板</h2><span class="beta">β版</span></div>
+    <p>メンバーを探しているバンドも、バンドに入りたい人も、ここに書き込めます。気になる投稿があったら、書かれている連絡方法で声をかけてみてください。</p>
+
+    <div class="board-tools">
+      <div class="seg board-seg" role="group" aria-label="種類で絞り込む">
+        <button type="button" data-kind="all" aria-pressed="true">すべて</button>
+        <button type="button" data-kind="recruit" aria-pressed="false">メンバー募集</button>
+        <button type="button" data-kind="join" aria-pressed="false">加入希望</button>
+      </div>
+      <label class="sr" for="part-filter">パートで絞り込む</label>
+      <select id="part-filter">
+        <option value="">すべてのパート</option>
+        <option>ボーカル</option><option>ギター</option><option>ベース</option><option>ドラム</option><option>キーボード</option><option>その他</option>
+      </select>
+    </div>
+
+    <button type="button" id="new-post" class="btn" hidden>投稿する</button>
+
+    <form id="post-form" class="post-form" hidden novalidate>
+      <fieldset class="kind-pick">
+        <legend>種類</legend>
+        <label><input type="radio" name="kind" id="f-kind-recruit" value="recruit" checked> メンバー募集<small>バンドのメンバーを探している</small></label>
+        <label><input type="radio" name="kind" id="f-kind-join" value="join"> 加入希望<small>入れるバンドを探している</small></label>
+      </fieldset>
+      <div class="field">
+        <label for="f-name">名前</label>
+        <input id="f-name" maxlength="20" autocomplete="name" placeholder="例：室工 太郎">
+      </div>
+      <div class="field">
+        <label for="f-title">タイトル</label>
+        <input id="f-title" maxlength="40" placeholder="例：SHISHAMOのコピバン、ベース募集！">
+      </div>
+      <fieldset class="field">
+        <legend id="parts-label">パート（募集するパート／自分のパート）</legend>
+        <div class="checks" id="f-parts">
+          <label><input type="checkbox" name="part" value="ボーカル">ボーカル</label>
+          <label><input type="checkbox" name="part" value="ギター">ギター</label>
+          <label><input type="checkbox" name="part" value="ベース">ベース</label>
+          <label><input type="checkbox" name="part" value="ドラム">ドラム</label>
+          <label><input type="checkbox" name="part" value="キーボード">キーボード</label>
+          <label><input type="checkbox" name="part" value="その他">その他</label>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label for="f-body">内容</label>
+        <textarea id="f-body" rows="5" maxlength="400" placeholder="やりたいジャンルや曲、出たいライブ、練習の頻度、今のメンバー構成など"></textarea>
+      </div>
+      <div class="field">
+        <label for="f-contact">連絡方法</label>
+        <input id="f-contact" maxlength="60" placeholder="例：部のLINEで個チャしてください">
+      </div>
+      <div class="hp" aria-hidden="true"><label for="f-website">この欄は空のままにしてください</label><input id="f-website" tabindex="-1" autocomplete="off"></div>
+      <p class="form-error" id="form-error" role="alert"></p>
+      <div class="form-actions">
+        <button type="submit" class="btn" id="f-submit">投稿する</button>
+        <button type="button" class="chip" id="f-cancel">キャンセル</button>
+      </div>
+    </form>
+
+    <p id="board-status" class="board-status" role="status">掲示板を読み込んでいます…</p>
+    <div id="posts" class="posts"></div>
+  </section>
+  </div>
+
+  <div class="panel" id="p-about" hidden>
+  <section id="bucho">
+    <div class="sec-head"><h2>部長の紹介</h2></div>
+    <div class="profile">
+      <div class="avatar" aria-hidden="true">木</div>
+      <div>
+        <span class="eyebrow">部長</span>
+        <h3 class="pname">木下</h3>
+        <p class="lead">サークルのことで困ったことや相談があれば、気軽に声をかけてください。</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="consult">
+    <div class="sec-head"><h2>お悩み相談</h2></div>
+    <div class="consult">
+      <p>サークル活動のこと、バンドのこと、ちょっとしたモヤモヤでも大丈夫です。直接言いにくいことは、こちらのフォームから送ってください。</p>
+      <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSd25pjStMlNVO_atbPNfp9sZdXkMs9b7nZbUAwlFtXNk5KOIw/viewform" target="_blank" rel="noopener">相談フォームを開く</a>
+    </div>
+  </section>
+  </div>
+
+  <div class="panel" id="p-omikuji" hidden>
+  <section id="omikuji">
+    <div class="sec-head"><h2>アコサーおみくじ</h2></div>
+    <p class="lead">今日の運勢を占ってみましょう。おみくじは1日1回だけ引けます。</p>
+    <div class="omk-stage" id="omk-stage">
+      <div class="omk-box" aria-hidden="true"><span>おみくじ</span></div>
+      <button type="button" id="omk-draw" class="btn">おみくじを引く</button>
+      <p id="omk-note" class="omk-note" role="status"></p>
+    </div>
+    <div id="omk-result" class="omk-result" tabindex="-1" hidden></div>
+  </section>
+  </div>
+
+  <div class="panel" id="p-boyaki" hidden>
+  <section id="boyaki">
+    <div class="sec-head"><h2>管理人のアコサー日記</h2></div>
+    <p class="lead">サイトの管理人が、サークルのことや日々思ったことをゆるく書き残す場所です。</p>
+    <div class="bk-lock" id="bk-lock-area">
+      <button type="button" id="bk-open" class="chip">管理人として書く</button>
+    </div>
+    <form id="bk-form" class="post-form" hidden novalidate>
+      <div class="field">
+        <label for="bk-body">日記を書く</label>
+        <textarea id="bk-body" rows="4" maxlength="1000" placeholder="今日思ったこと"></textarea>
+      </div>
+      <div class="field">
+        <label for="bk-image">画像（任意・1枚）</label>
+        <input id="bk-image" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+        <div id="bk-preview" class="img-preview" hidden>
+          <img id="bk-preview-img" alt="選んだ画像のプレビュー">
+          <button type="button" id="bk-image-clear" class="chip">画像を外す</button>
+        </div>
+        <small class="hint">大きい画像は自動で縮小して保存されます。</small>
+      </div>
+      <p class="form-error" id="bk-error" role="alert"></p>
+      <div class="form-actions">
+        <button type="submit" class="btn" id="bk-submit">投稿する</button>
+        <button type="button" class="chip" id="bk-lock">ログアウト</button>
+      </div>
+    </form>
+    <p id="bk-status" class="board-status" role="status">読み込んでいます…</p>
+    <div id="bk-list" class="bk-list"></div>
+  </section>
+  </div>
+
+  <footer>
+    <div class="strings" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <p>室蘭工業大学 アコースティックギターサークル／Instagram @agc_mit</p>
+    <p>内容の修正・追加は 森 まで。</p>
+    <p><button type="button" id="admin-toggle" class="link-btn">管理人ログイン</button></p>
+  </footer>
+
+  <dialog id="admin-dialog" class="admin-dialog" aria-labelledby="admin-title">
+    <form id="admin-form" novalidate>
+      <h3 id="admin-title">管理人ログイン</h3>
+      <p class="lead">お知らせとアコサー日記を投稿するには、管理人パスワードを入力してください。</p>
+      <div class="pass-row">
+        <label class="sr" for="admin-pass">パスワード</label>
+        <input id="admin-pass" type="password" inputmode="numeric" autocomplete="current-password" maxlength="40">
+        <button type="submit" class="btn" id="admin-submit">ログイン</button>
+      </div>
+      <p class="form-error" id="admin-error" role="alert"></p>
+      <button type="button" class="chip" id="admin-cancel">閉じる</button>
+    </form>
+  </dialog>
+</div>
+
+<script>
+/* ===== 設定 =====
+   GAS をウェブアプリとして公開したら、表示された URL をここに貼ってください。 */
+var CONFIG = {
+  API_URL: 'https://script.google.com/macros/s/AKfycbx5siix3M-QBjA6jx6cyQQht-MApxD_X4K37f2w-FYfoWn0FouEKWDiCyHgFXud4rwuaA/exec'
+};
+var LOADERS = {}, CURRENT_PANEL = 'news';
+
+
+/* ===== 共通 ===== */
+function el(tag, cls, text){
+  var e = document.createElement(tag);
+  if(cls) e.className = cls;
+  if(text != null) e.textContent = text;
+  return e;
+}
+function $(s){ return document.querySelector(s); }
+function $$(s){ return [].slice.call(document.querySelectorAll(s)); }
+function store(k, v){ try{ if(v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); }catch(e){ return null; } }
+
+
+/* ===== 画像の縮小（お知らせ・日記で共有） ===== */
+var IMG_MAX = 200000;
+function safeImg(d){ d = String(d || ''); return /^data:image\/jpeg;base64,[A-Za-z0-9+\/=]+$/.test(d) && d.length <= IMG_MAX ? d : ''; }
+function compress(file){
+  return new Promise(function(resolve, reject){
+    var reader = new FileReader();
+    reader.onerror = function(){ reject(new Error('read')); };
+    reader.onload = function(){
+      var im = new Image();
+      im.onerror = function(){ reject(new Error('decode')); };
+      im.onload = function(){
+        var base = Math.min(1, 1280 / Math.max(im.width, im.height));
+        var tries = [[1,.82],[1,.65],[.75,.65],[.55,.6],[.4,.55],[.3,.5]];
+        var c = document.createElement('canvas'), g = c.getContext('2d');
+        for(var i = 0; i < tries.length; i++){
+          var sc = base * tries[i][0];
+          c.width = Math.max(1, Math.round(im.width * sc)); c.height = Math.max(1, Math.round(im.height * sc));
+          g.fillStyle = '#ffffff'; g.fillRect(0, 0, c.width, c.height);
+          g.drawImage(im, 0, 0, c.width, c.height);
+          var d = c.toDataURL('image/jpeg', tries[i][1]);
+          if(d.length <= IMG_MAX) return resolve(d);
+        }
+        reject(new Error('size'));
+      };
+      im.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+/* ===== ハンバーガーメニュー ===== */
+(function(){
+  var TITLES = {news:'お知らせ', studio:'スタジオ予約', live:'ライブエントリー', print:'印刷室',
+                board:'メンバー募集', about:'部長・お悩み相談', omikuji:'アコサーおみくじ', boyaki:'アコサー日記'};
+  var ALIAS = {news:'news', studio:'studio', kiran:'studio', soliste:'studio', elm:'studio', live:'live',
+               print:'print', board:'board', about:'about', bucho:'about', consult:'about', omikuji:'omikuji', boyaki:'boyaki'};
+  var btn = $('#menu-btn'), menu = $('#menu'), backdrop = $('#menu-backdrop'), topbar = $('.topbar');
+  var links = $$('#menu a[data-panel]');
+
+  function setMenu(open, returnFocus){
+    menu.hidden = !open; backdrop.hidden = !open;
+    btn.setAttribute('aria-expanded', open);
+    btn.setAttribute('aria-label', open ? 'メニューを閉じる' : 'メニューを開く');
+    try{ document.documentElement.style.overflow = open ? 'hidden' : ''; }catch(e){}
+    if(open){ (menu.querySelector('[aria-current]') || links[0]).focus(); }
+    else if(returnFocus){ btn.focus(); }
+  }
+  function show(id, scroll){
+    Object.keys(TITLES).forEach(function(k){ document.getElementById('p-' + k).hidden = k !== id; });
+    links.forEach(function(a){
+      if(a.getAttribute('data-panel') === id) a.setAttribute('aria-current','page');
+      else a.removeAttribute('aria-current');
+    });
+    $('#current-title').textContent = TITLES[id];
+    CURRENT_PANEL = id;
+    if(LOADERS[id]) LOADERS[id]();
+    try{ history.replaceState(null, '', '#' + id); }catch(e){}
+    if(scroll && topbar.getBoundingClientRect().top < 1){
+      try{ topbar.scrollIntoView({block:'start'}); }catch(e){}
+    }
+  }
+
+  btn.addEventListener('click', function(){ setMenu(menu.hidden); });
+  $('#menu-close').addEventListener('click', function(){ setMenu(false, true); });
+  backdrop.addEventListener('click', function(){ setMenu(false, true); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape' && !menu.hidden) setMenu(false, true); });
+  links.forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      show(a.getAttribute('data-panel'), true);
+      setMenu(false);
+    });
+  });
+  // ページ内の #リンク（早見表など）
+  document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if(!a || a.hasAttribute('data-panel')) return;
+    var key = a.getAttribute('href').slice(1);
+    if(!ALIAS[key]) return;
+    e.preventDefault();
+    if(ALIAS[key] === key){ show(key, true); return; }
+    show(ALIAS[key]);
+    var t = document.getElementById(key);
+    if(t){ try{ t.scrollIntoView({block:'start'}); }catch(err){} }
+  });
+  show(ALIAS[(location.hash || '').slice(1)] || 'news');
+})();
+
+/* ===== ライブ：内部／外部の切り替え ===== */
+(function(){
+  var btns = $$('.live-seg button');
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){
+      btns.forEach(function(x){
+        var on = x === b;
+        x.setAttribute('aria-pressed', on);
+        document.getElementById(x.getAttribute('data-live')).hidden = !on;
+      });
+    });
+  });
+})();
+
+/* ===== サーバー（GAS）とのやり取り ===== */
+var api = {
+  ready: !!CONFIG.API_URL,
+  list: function(type){
+    return fetch(CONFIG.API_URL + '?action=list&type=' + encodeURIComponent(type) + '&t=' + Date.now())
+      .then(function(r){ return r.json(); }).then(api.check).then(function(d){ return d.items || []; });
+  },
+  post: function(payload){
+    // text/plain で送ると、GAS への送信で余計な確認通信（プリフライト）が起きない
+    return fetch(CONFIG.API_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload)})
+      .then(function(r){ return r.json(); }).then(api.check);
+  },
+  check: function(d){
+    if(!d || !d.ok) throw new Error((d && d.error) || '通信に失敗しました。');
+    return d;
+  }
+};
+var NOT_READY = 'ただいま準備中です。もうしばらくお待ちください。';
+function errText(e){ return (e && e.message && !/fetch|network|JSON/i.test(e.message)) ? e.message : '通信に失敗しました。電波の良いところで、もう一度お試しください。'; }
+function fmtDate(ms, withYear){
+  if(!ms) return '';
+  var d = new Date(ms);
+  return (withYear ? d.getFullYear() + '/' : '') + (d.getMonth()+1) + '/' + d.getDate();
+}
+function safeHttps(u){ u = String(u || '').trim(); return /^https:\/\/[^\s"'<>]+$/.test(u) ? u : ''; }
+
+/* ===== 管理人ログイン（お知らせ・日記で共有） =====
+   パスワードの確認はサーバー側で行う。ページには保存しない（このタブを閉じるまでだけ覚える）。 */
+var admin = (function(){
+  var pw = '';
+  try{ pw = sessionStorage.getItem('agc-admin') || ''; }catch(e){}
+  var listeners = [];
+  var dlg = $('#admin-dialog'), form = $('#admin-form'), input = $('#admin-pass'), err = $('#admin-error'), submit = $('#admin-submit');
+  var resolveOpen = null;
+
+  function notify(){ listeners.forEach(function(f){ try{ f(!!pw); }catch(e){} }); syncFooter(); }
+  function syncFooter(){
+    $('#admin-toggle').textContent = pw ? '管理人ログアウト' : '管理人ログイン';
+  }
+  function close(ok){
+    if(dlg.open) dlg.close();
+    if(resolveOpen){ resolveOpen(ok); resolveOpen = null; }
+  }
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    var v = input.value;
+    if(!v){ err.textContent = 'パスワードを入力してください。'; return; }
+    if(!api.ready){ err.textContent = NOT_READY; return; }
+    submit.disabled = true; submit.textContent = '確認しています…';
+    try{
+      await api.post({action:'checkAdmin', password: v});
+      pw = v;
+      try{ sessionStorage.setItem('agc-admin', v); }catch(x){}
+      input.value = ''; err.textContent = '';
+      close(true); notify();
+    }catch(x){
+      err.textContent = errText(x); input.select();
+    }finally{
+      submit.disabled = false; submit.textContent = 'ログイン';
+    }
+  });
+  $('#admin-cancel').addEventListener('click', function(){ close(false); });
+  dlg.addEventListener('cancel', function(){ if(resolveOpen){ resolveOpen(false); resolveOpen = null; } });
+  $('#admin-toggle').addEventListener('click', function(){ pw ? api_logout() : open(); });
+
+  function open(){
+    return new Promise(function(res){
+      resolveOpen = res; err.textContent = ''; input.value = '';
+      if(dlg.showModal) dlg.showModal(); else dlg.setAttribute('open', '');
+      input.focus();
+    });
+  }
+  function api_logout(){
+    pw = '';
+    try{ sessionStorage.removeItem('agc-admin'); }catch(e){}
+    notify();
+  }
+  syncFooter();
+  return {
+    get password(){ return pw; },
+    get on(){ return !!pw; },
+    login: function(){ return pw ? Promise.resolve(true) : open(); },
+    logout: api_logout,
+    onChange: function(f){ listeners.push(f); },
+    // パスワードが変わっていた場合など、サーバーに断られたらログアウトする
+    rejected: function(e){ if(/パスワード/.test(String(e && e.message))) api_logout(); }
+  };
+})();
+
+/* ===== お知らせ・お役立ち情報 ===== */
+(function(){
+  var CAT = {info:'お知らせ', tips:'お役立ち'};
+  var statusEl = $('#news-status'), list = $('#news-list'), newBtn = $('#news-new'),
+      form = $('#news-form'), errEl = $('#news-error'), submitBtn = $('#n-submit');
+  var items = [], loaded = false, filterCat = 'all', confirmId = null, busy = false, pendingImage = '';
+
+  function render(){
+    list.textContent = '';
+    if(!loaded) return;
+    var shown = items.filter(function(n){ return filterCat === 'all' || n.category === filterCat; });
+    if(!shown.length){
+      list.appendChild(el('div','empty', items.length ? 'この種類の投稿はまだありません。' : 'まだお知らせはありません。'));
+      return;
+    }
+    shown.forEach(function(n){
+      var card = el('article','post news-item');
+      var top = el('div','post-top');
+      top.appendChild(el('span','kind ' + (n.category === 'tips' ? 'join' : 'recruit'), CAT[n.category] || 'お知らせ'));
+      top.appendChild(el('span','news-date', fmtDate(n.createdAt, true)));
+      card.appendChild(top);
+      card.appendChild(el('h3', null, n.title));
+      if(n.image){
+        var img = el('img','news-img'); img.src = n.image; img.alt = n.title; img.loading = 'lazy';
+        img.referrerPolicy = 'no-referrer';
+        card.appendChild(img);
+      }
+      if(n.body) card.appendChild(el('p','post-body', n.body));
+      if(n.links.length){
+        var row = el('div','news-links');
+        n.links.forEach(function(l){
+          var a = el('a','btn', l.label || 'リンクを開く');
+          a.href = l.url; a.target = '_blank'; a.rel = 'noopener';
+          row.appendChild(a);
+        });
+        card.appendChild(row);
+      }
+      if(admin.on){
+        var act = el('div','post-actions news-actions');
+        if(confirmId === n.id){
+          act.appendChild(el('span', null, '削除しますか？'));
+          var yes = el('button','danger','削除する'); yes.type = 'button';
+          yes.onclick = function(){ remove(n.id); };
+          var no = el('button', null, 'やめる'); no.type = 'button';
+          no.onclick = function(){ confirmId = null; render(); };
+          act.appendChild(yes); act.appendChild(no);
+        } else {
+          var del = el('button','danger','削除'); del.type = 'button';
+          del.onclick = function(){ confirmId = n.id; render(); };
+          act.appendChild(del);
+        }
+        card.appendChild(act);
+      }
+      list.appendChild(card);
+    });
+  }
+
+  async function load(){
+    if(!api.ready){ statusEl.textContent = NOT_READY; return; }
+    if(!loaded) statusEl.textContent = 'お知らせを読み込んでいます…';
+    try{
+      var got = await api.list('news');
+      items = got.map(function(b){
+        return {
+          id: String(b.id), category: b.category === 'tips' ? 'tips' : 'info',
+          title: String(b.title || '').slice(0,60), body: String(b.body || '').slice(0,2000),
+          image: safeHttps(b.image),
+          links: (Array.isArray(b.links) ? b.links : []).map(function(l){ return {label: String((l && l.label) || '').slice(0,30), url: safeHttps(l && l.url)}; }).filter(function(l){ return l.url; }).slice(0,3),
+          createdAt: Number(b.createdAt) || 0
+        };
+      });
+      loaded = true; statusEl.textContent = '';
+    }catch(e){
+      statusEl.textContent = 'お知らせを読み込めませんでした。' + errText(e);
+    }
+    render();
+  }
+  async function remove(id){
+    if(busy) return;
+    busy = true; confirmId = null;
+    try{ await api.post({action:'deleteNews', id: id, password: admin.password}); await load(); }
+    catch(e){ admin.rejected(e); statusEl.textContent = '削除できませんでした。' + errText(e); render(); }
+    finally{ busy = false; }
+  }
+
+  $$('.news-seg button').forEach(function(b){
+    b.addEventListener('click', function(){
+      filterCat = b.getAttribute('data-cat');
+      $$('.news-seg button').forEach(function(x){ x.setAttribute('aria-pressed', x === b); });
+      render();
+    });
+  });
+
+  function clearImage(){
+    pendingImage = ''; $('#n-image').value = '';
+    $('#n-preview').hidden = true; $('#n-preview-img').removeAttribute('src');
+  }
+  $('#n-image').addEventListener('change', async function(e){
+    var f = e.target.files && e.target.files[0];
+    errEl.textContent = '';
+    if(!f){ clearImage(); return; }
+    try{ pendingImage = await compress(f); $('#n-preview-img').src = pendingImage; $('#n-preview').hidden = false; }
+    catch(x){ clearImage(); errEl.textContent = 'この画像は読み込めませんでした。JPEGやPNGの画像を選んでください。'; }
+  });
+  $('#n-image-clear').addEventListener('click', clearImage);
+
+  function openForm(show){
+    form.hidden = !show;
+    newBtn.hidden = show || !admin.on;
+    errEl.textContent = '';
+    if(show) $('#n-title').focus();
+  }
+  newBtn.addEventListener('click', function(){ openForm(true); });
+  $('#n-cancel').addEventListener('click', function(){ form.reset(); clearImage(); openForm(false); });
+  admin.onChange(function(on){ if(!on){ form.reset(); clearImage(); form.hidden = true; } newBtn.hidden = !on || !form.hidden; render(); });
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    if(busy) return;
+    var category = $('#n-cat-tips').checked ? 'tips' : 'info';
+    var title = $('#n-title').value.trim();
+    var body = $('#n-body').value.trim();
+    var links = [];
+    var pairs = [['#n-l1-label','#n-l1-url'],['#n-l2-label','#n-l2-url']];
+    for(var i = 0; i < pairs.length; i++){
+      var raw = $(pairs[i][1]).value.trim();
+      if(!raw) continue;
+      var u = safeHttps(raw);
+      if(!u){ errEl.textContent = 'リンクは https:// から始まるURLを入力してください。'; $(pairs[i][1]).focus(); return; }
+      links.push({label: $(pairs[i][0]).value.trim().slice(0,30), url: u});
+    }
+    if(!title){ errEl.textContent = 'タイトルを入力してください。'; $('#n-title').focus(); return; }
+    busy = true; submitBtn.disabled = true; submitBtn.textContent = '投稿しています…';
+    try{
+      await api.post({action:'createNews', password: admin.password, category: category, title: title, body: body, links: links, image: pendingImage});
+      form.reset(); clearImage(); openForm(false);
+      await load();
+    }catch(x){
+      admin.rejected(x);
+      errEl.textContent = '投稿できませんでした。' + errText(x);
+    }finally{
+      busy = false; submitBtn.disabled = false; submitBtn.textContent = '投稿する';
+    }
+  });
+
+  newBtn.hidden = !admin.on;
+  LOADERS.news = load;
+})();
+
+/* ===== バンドメンバー募集掲示板（β） =====
+   自分の投稿は、投稿したときに受け取った「編集キー」をこの端末に保存して見分ける。 */
+(function(){
+  var KIND = {recruit:'メンバー募集', join:'加入希望'};
+  var statusEl = $('#board-status'), list = $('#posts'), newBtn = $('#new-post'),
+      form = $('#post-form'), errEl = $('#form-error'), submitBtn = $('#f-submit');
+  var posts = [], loaded = false, filterKind = 'all', filterPart = '', busy = false, confirmId = null;
+
+  function keys(){ try{ return JSON.parse(localStorage.getItem('agc-board-keys') || '{}') || {}; }catch(e){ return {}; } }
+  function saveKey(id, key){ var k = keys(); k[id] = key; try{ localStorage.setItem('agc-board-keys', JSON.stringify(k)); }catch(e){} }
+  function dropKey(id){ var k = keys(); delete k[id]; try{ localStorage.setItem('agc-board-keys', JSON.stringify(k)); }catch(e){} }
+
+  function render(){
+    list.textContent = '';
+    if(!loaded) return;
+    var mine = keys();
+    var items = posts.filter(function(p){
+      if(filterKind !== 'all' && p.kind !== filterKind) return false;
+      if(filterPart && p.parts.indexOf(filterPart) < 0) return false;
+      return true;
+    });
+    if(!items.length){
+      list.appendChild(el('div','empty', posts.length
+        ? 'この条件に合う投稿はありません。絞り込みを変えてみてください。'
+        : 'まだ投稿はありません。「投稿する」から最初の募集を書いてみましょう。'));
+      return;
+    }
+    items.forEach(function(p){
+      var isMine = !!mine[p.id];
+      var card = el('article','post' + (p.open ? '' : ' closed'));
+      var top = el('div','post-top');
+      top.appendChild(el('span','kind ' + p.kind, KIND[p.kind]));
+      if(!p.open) top.appendChild(el('span','state', p.kind === 'recruit' ? '募集終了' : '決定済み'));
+      card.appendChild(top);
+      card.appendChild(el('h3', null, p.title));
+      if(p.parts.length){
+        var parts = el('div','parts');
+        p.parts.forEach(function(x){ parts.appendChild(el('span', null, x)); });
+        card.appendChild(parts);
+      }
+      if(p.body) card.appendChild(el('p','post-body', p.body));
+      if(p.contact){
+        var c = el('p','post-contact');
+        c.appendChild(el('b', null, '連絡方法：'));
+        c.appendChild(document.createTextNode(p.contact));
+        card.appendChild(c);
+      }
+      var meta = el('div','post-meta');
+      meta.appendChild(el('span', null, (p.name || '名前なし') + (isMine ? '（あなた）' : '') + '・' + fmtDate(p.createdAt)));
+      if(isMine || admin.on){
+        var act = el('div','post-actions');
+        if(confirmId === p.id){
+          act.appendChild(el('span', null, '削除しますか？'));
+          var yes = el('button','danger','削除する'); yes.type = 'button';
+          yes.onclick = function(){ removePost(p.id); };
+          var no = el('button', null, 'やめる'); no.type = 'button';
+          no.onclick = function(){ confirmId = null; render(); };
+          act.appendChild(yes); act.appendChild(no);
+        } else {
+          if(isMine){
+            var tg = el('button', null, p.open ? (p.kind === 'recruit' ? '募集を終了' : '決まった') : '再開する');
+            tg.type = 'button';
+            tg.onclick = function(){ toggleOpen(p); };
+            act.appendChild(tg);
+          }
+          var del = el('button','danger','削除'); del.type = 'button';
+          del.onclick = function(){ confirmId = p.id; render(); };
+          act.appendChild(del);
+        }
+        meta.appendChild(act);
+      }
+      card.appendChild(meta);
+      list.appendChild(card);
+    });
+  }
+
+  async function load(){
+    if(!api.ready){ statusEl.textContent = NOT_READY; newBtn.hidden = true; return; }
+    if(!loaded) statusEl.textContent = '掲示板を読み込んでいます…';
+    try{
+      var got = await api.list('board');
+      posts = got.map(function(p){
+        return {
+          id: String(p.id), kind: p.kind === 'join' ? 'join' : 'recruit', name: String(p.name || '').slice(0,20),
+          title: String(p.title || '').slice(0,40), parts: Array.isArray(p.parts) ? p.parts.map(String).slice(0,6) : [],
+          body: String(p.body || '').slice(0,400), contact: String(p.contact || '').slice(0,60),
+          open: p.open !== false, createdAt: Number(p.createdAt) || 0
+        };
+      });
+      loaded = true; statusEl.textContent = '';
+    }catch(e){
+      statusEl.textContent = '掲示板を読み込めませんでした。' + errText(e);
+    }
+    render();
+  }
+  function auth(id){ var k = keys()[id]; return k ? {key: k} : {password: admin.password}; }
+  async function toggleOpen(p){
+    if(busy) return;
+    busy = true;
+    try{ await api.post(Object.assign({action:'updatePost', id: p.id, open: !p.open}, auth(p.id))); await load(); }
+    catch(e){ statusEl.textContent = '変更できませんでした。' + errText(e); }
+    finally{ busy = false; }
+  }
+  async function removePost(id){
+    if(busy) return;
+    busy = true; confirmId = null;
+    try{ await api.post(Object.assign({action:'deletePost', id: id}, auth(id))); dropKey(id); await load(); }
+    catch(e){ admin.rejected(e); statusEl.textContent = '削除できませんでした。' + errText(e); render(); }
+    finally{ busy = false; }
+  }
+
+  function openForm(show){
+    form.hidden = !show;
+    newBtn.hidden = show;
+    errEl.textContent = '';
+    if(show){
+      var saved = store('agc-board-name');
+      if(saved && !$('#f-name').value) $('#f-name').value = saved;
+      ($('#f-name').value ? $('#f-title') : $('#f-name')).focus();
+    }
+  }
+  function syncPartsLabel(){
+    $('#parts-label').textContent = $('#f-kind-join').checked ? 'パート（自分ができるパート）' : 'パート（募集するパート）';
+  }
+
+  $$('.board-seg button').forEach(function(b){
+    b.addEventListener('click', function(){
+      filterKind = b.getAttribute('data-kind');
+      $$('.board-seg button').forEach(function(x){ x.setAttribute('aria-pressed', x === b); });
+      render();
+    });
+  });
+  $('#part-filter').addEventListener('change', function(e){ filterPart = e.target.value; render(); });
+  newBtn.addEventListener('click', function(){ openForm(true); });
+  $('#f-cancel').addEventListener('click', function(){ form.reset(); syncPartsLabel(); openForm(false); });
+  $$('input[name="kind"]').forEach(function(r){ r.addEventListener('change', syncPartsLabel); });
+  syncPartsLabel();
+  admin.onChange(render);
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    if(busy) return;
+    var data = {
+      action: 'createPost', kind: $('#f-kind-join').checked ? 'join' : 'recruit',
+      name: $('#f-name').value.trim(), title: $('#f-title').value.trim(),
+      parts: $$('input[name="part"]:checked').map(function(x){ return x.value; }),
+      body: $('#f-body').value.trim(), contact: $('#f-contact').value.trim(), website: $('#f-website').value
+    };
+    if(!data.name){ errEl.textContent = '名前を入力してください。'; $('#f-name').focus(); return; }
+    if(!data.title){ errEl.textContent = 'タイトルを入力してください。'; $('#f-title').focus(); return; }
+    if(!data.parts.length){ errEl.textContent = 'パートを1つ以上選んでください。'; return; }
+    if(!data.contact){ errEl.textContent = '連絡方法を入力してください。'; $('#f-contact').focus(); return; }
+    busy = true; submitBtn.disabled = true; submitBtn.textContent = '投稿しています…';
+    try{
+      var res = await api.post(data);
+      if(res.id && res.key) saveKey(res.id, res.key);
+      store('agc-board-name', data.name);
+      form.reset(); syncPartsLabel(); openForm(false);
+      await load();
+    }catch(x){
+      errEl.textContent = '投稿できませんでした。' + errText(x);
+    }finally{
+      busy = false; submitBtn.disabled = false; submitBtn.textContent = '投稿する';
+    }
+  });
+
+  newBtn.hidden = !api.ready;
+  LOADERS.board = load;
+})();
+
+/* ===== 管理人のアコサー日記 ===== */
+(function(){
+  var statusEl = $('#bk-status'), list = $('#bk-list'), lockArea = $('#bk-lock-area'),
+      form = $('#bk-form'), errEl = $('#bk-error'), submitBtn = $('#bk-submit');
+  var items = [], loaded = false, busy = false, confirmId = null, pendingImage = '';
+
+  function stamp(ms){
+    if(!ms) return '';
+    var d = new Date(ms);
+    var mm = String(d.getMinutes()); if(mm.length < 2) mm = '0' + mm;
+    return d.getFullYear() + '/' + (d.getMonth()+1) + '/' + d.getDate() + ' ' + d.getHours() + ':' + mm;
+  }
+  function sync(){ lockArea.hidden = admin.on; form.hidden = !admin.on; }
+  function render(){
+    list.textContent = '';
+    if(!loaded) return;
+    if(!items.length){ list.appendChild(el('div','empty','まだ日記はありません。')); return; }
+    items.forEach(function(it){
+      var row = el('article','bk-item');
+      row.appendChild(el('time','bk-time', stamp(it.createdAt)));
+      if(it.body) row.appendChild(el('p','post-body', it.body));
+      if(it.image){
+        var img = el('img','news-img'); img.src = it.image; img.alt = '日記の画像'; img.loading = 'lazy';
+        img.referrerPolicy = 'no-referrer';
+        row.appendChild(img);
+      }
+      if(admin.on){
+        var act = el('div','post-actions');
+        if(confirmId === it.id){
+          act.appendChild(el('span', null, '削除しますか？'));
+          var yes = el('button','danger','削除する'); yes.type = 'button';
+          yes.onclick = function(){ remove(it.id); };
+          var no = el('button', null, 'やめる'); no.type = 'button';
+          no.onclick = function(){ confirmId = null; render(); };
+          act.appendChild(yes); act.appendChild(no);
+        } else {
+          var del = el('button','danger','削除'); del.type = 'button';
+          del.onclick = function(){ confirmId = it.id; render(); };
+          act.appendChild(del);
+        }
+        row.appendChild(act);
+      }
+      list.appendChild(row);
+    });
+  }
+  async function load(){
+    if(!api.ready){ statusEl.textContent = NOT_READY; return; }
+    if(!loaded) statusEl.textContent = '読み込んでいます…';
+    try{
+      var got = await api.list('diary');
+      items = got.map(function(b){ return {id: String(b.id), body: String(b.body || '').slice(0,1000), image: safeHttps(b.image), createdAt: Number(b.createdAt) || 0}; });
+      loaded = true; statusEl.textContent = '';
+    }catch(e){ statusEl.textContent = '読み込めませんでした。' + errText(e); }
+    render();
+  }
+  async function remove(id){
+    if(busy) return;
+    busy = true; confirmId = null;
+    try{ await api.post({action:'deleteDiary', id: id, password: admin.password}); await load(); }
+    catch(e){ admin.rejected(e); statusEl.textContent = '削除できませんでした。' + errText(e); render(); }
+    finally{ busy = false; }
+  }
+  function clearImage(){
+    pendingImage = ''; $('#bk-image').value = '';
+    $('#bk-preview').hidden = true; $('#bk-preview-img').removeAttribute('src');
+  }
+  $('#bk-image').addEventListener('change', async function(e){
+    var f = e.target.files && e.target.files[0];
+    errEl.textContent = '';
+    if(!f){ clearImage(); return; }
+    try{ pendingImage = await compress(f); $('#bk-preview-img').src = pendingImage; $('#bk-preview').hidden = false; }
+    catch(x){ clearImage(); errEl.textContent = 'この画像は読み込めませんでした。JPEGやPNGの画像を選んでください。'; }
+  });
+  $('#bk-image-clear').addEventListener('click', clearImage);
+  $('#bk-open').addEventListener('click', async function(){ if(await admin.login()) $('#bk-body').focus(); });
+  $('#bk-lock').addEventListener('click', function(){ form.reset(); clearImage(); admin.logout(); });
+  admin.onChange(function(){ sync(); render(); });
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    if(busy) return;
+    var body = $('#bk-body').value.trim();
+    if(!body && !pendingImage){ errEl.textContent = '本文か画像を入れてください。'; $('#bk-body').focus(); return; }
+    busy = true; submitBtn.disabled = true; submitBtn.textContent = '投稿しています…';
+    try{
+      await api.post({action:'createDiary', password: admin.password, body: body, image: pendingImage});
+      form.reset(); clearImage(); errEl.textContent = '';
+      await load();
+    }catch(x){
+      admin.rejected(x);
+      errEl.textContent = '投稿できませんでした。' + errText(x);
+    }finally{
+      busy = false; submitBtn.disabled = false; submitBtn.textContent = '投稿する';
+    }
+  });
+
+  sync();
+  LOADERS.boyaki = load;
+})();
+/* ===== アコサーおみくじ =====
+   1日1回。結果はこの端末に保存する。 */
+(function(){
+  var FORTUNES = [
+    {name:'大吉', w:14, msg:'何をやってもキマる日。新しい曲に手を出すなら今日です。'},
+    {name:'中吉', w:20, msg:'練習の成果が見えやすい日。苦手なフレーズに挑戦してみましょう。'},
+    {name:'小吉', w:20, msg:'小さな上達を感じられる日。基礎練をコツコツと。'},
+    {name:'吉',   w:20, msg:'いつも通りが一番の日。バンドメンバーとの雑談から良いアイデアが出るかも。'},
+    {name:'末吉', w:16, msg:'後半に調子が上がる日。準備をていねいにすると吉。'},
+    {name:'凶',   w:10, msg:'忘れ物に注意。出かける前に楽器と持ち物をもう一度確認しましょう。'}
+  ];
+  var PRACTICE = ['苦手なフレーズが急にできるようになるかも。','メトロノームと仲良くなれる日。','いつもよりテンポを10下げると吉。','リズムのキレが冴えわたる。','手元を見ずに演奏できるようになるかも。','練習を録音して聴き返すと発見がある。','練習前のストレッチが鍵。','ほかのパートの音をよく聴くと合わせがうまくいく。'];
+  var LIVE = ['MCで思わぬウケを取る予感。','セトリを見直すと良い流れが見つかる。','リハで音作りを詰めると本番がうまくいく。','お客さんとの距離が縮まる日。','緊張しても、最初の一音を出せば大丈夫。','出番前の深呼吸が効きます。','メンバーとのアイコンタクトが決め手。'];
+  var GEAR = ['セッティングを少し変えると新しい音が見つかる。','消耗品（弦・スティック・電池など）を替えるベストタイミング。','シールドは八の字巻きで運気アップ。','楽器のお手入れをすると音が応えてくれる。','予備の電池を持っておくと吉。','マイクやスタンドの位置をていねいに合わせると吉。','イヤホンで自分のパートを聴き込むと吉。'];
+  var PARTS = ['ボーカル','ギター','ベース','ドラム','キーボード'];
+  var ITEMS = ['スティック','ピック','替え弦','チューナー','チューニングキー','イヤホン','譜面台','メトロノーム','予備の電池','のど飴','タオル','缶コーヒー','クロス','耳栓'];
+  var PLACES = ['きらん','ソリスト','エルム楽器','印刷室','部室','自分の部屋'];
+  var stage = $('#omk-stage'), drawBtn = $('#omk-draw'), note = $('#omk-note'), result = $('#omk-result');
+  var today = '', current = null;
+
+  function todayJST(){
+    try{ return new Date().toLocaleDateString('sv-SE', {timeZone:'Asia/Tokyo'}); }
+    catch(e){ var d = new Date(Date.now() + 9*3600000); return d.toISOString().slice(0,10); }
+  }
+  function pick(a){ return a[Math.floor(Math.random() * a.length)]; }
+  function pickFortune(){
+    var total = FORTUNES.reduce(function(s,f){ return s + f.w; }, 0), r = Math.random() * total;
+    for(var i = 0; i < FORTUNES.length; i++){ r -= FORTUNES[i].w; if(r < 0) return FORTUNES[i]; }
+    return FORTUNES[0];
+  }
+  function draw(){
+    var f = pickFortune();
+    return {fortune:f.name, msg:f.msg, practice:pick(PRACTICE), live:pick(LIVE), gear:pick(GEAR),
+            bpm:String(70 + 5 * Math.floor(Math.random() * 23)), partner:pick(PARTS), item:pick(ITEMS), place:pick(PLACES)};
+  }
+  function valid(r){
+    return r && typeof r === 'object' && FORTUNES.some(function(f){ return f.name === r.fortune; });
+  }
+  function localGet(){
+    try{ var v = JSON.parse(localStorage.getItem('agc-omikuji') || 'null'); return v && v.date === today && valid(v.result) ? v.result : null; }
+    catch(e){ return null; }
+  }
+  function localSet(r){ try{ localStorage.setItem('agc-omikuji', JSON.stringify({date: today, result: r})); }catch(e){} }
+
+  function show(r, fresh){
+    current = r;
+    result.textContent = '';
+    var big = el('div','omk-fortune', r.fortune);
+    if(r.fortune === '大吉') big.classList.add('great');
+    result.appendChild(el('p','omk-date', today.replace(/-/g,'/') + ' の運勢'));
+    result.appendChild(big);
+    result.appendChild(el('p','omk-msg', String(r.msg || '')));
+    var dl = el('dl','omk-rows');
+    [['練習運', r.practice], ['ライブ運', r.live], ['機材運', r.gear],
+     r.bpm ? ['ラッキーBPM', r.bpm] : ['ラッキーコード', r.chord],
+     r.partner ? ['相性のいいパート', r.partner + 'の人と話すと吉'] : null,
+     ['ラッキーアイテム', r.item], ['ラッキー練習場所', r.place]].filter(Boolean).forEach(function(row){
+      dl.appendChild(el('dt', null, row[0])); dl.appendChild(el('dd', null, String(row[1] || '')));
+    });
+    result.appendChild(dl);
+    result.hidden = false;
+    stage.classList.toggle('drawn', true);
+    drawBtn.hidden = true;
+    note.textContent = '今日はもう引きました。次は明日の0時から引けます。';
+    if(fresh){
+      result.classList.remove('reveal'); void result.offsetWidth; result.classList.add('reveal');
+      result.focus();
+    }
+  }
+
+  drawBtn.addEventListener('click', async function(){
+    if(current) return;
+    drawBtn.disabled = true;
+    stage.classList.add('shaking');
+    var r = draw();
+    localSet(r);
+    setTimeout(function(){
+      stage.classList.remove('shaking');
+      drawBtn.disabled = false;
+      show(r, true);
+    }, matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 900);
+  });
+
+  today = todayJST();
+  var cached = localGet();
+  if(cached) show(cached, false);
+})();
+
+// 最初に開いたページのデータを読み込む
+if(LOADERS[CURRENT_PANEL]) LOADERS[CURRENT_PANEL]();
+</script>
+</body>
+</html>

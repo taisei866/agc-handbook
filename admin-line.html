@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>対応状況 | アコサー部員ハンドブック</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=M+PLUS+1+Code:wght@500&display=swap">
+<style>
+:root{
+  --bg:#f3f5f1; --surface:#fff; --fg:#1d2a24; --muted:#5d6b64; --line:#d6ddd7;
+  --wood:#2f4a3e; --accent:#b07a1e; --accent-ink:#7a520c;
+  --ok:#2f7d4f; --ok-bg:#e3f2e8; --no:#a8432f; --no-bg:#f8e4df; --mb:#8a6a12; --mb-bg:#f6eccd; --todo:#6b4fa8; --todo-bg:#ece6f7;
+  --danger:#c0392b;
+  --display:"Dela Gothic One","Zen Kaku Gothic New",system-ui,sans-serif;
+  --body:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+  --mono:"M PLUS 1 Code",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#121a17; --surface:#1a2420; --fg:#e7ece9; --muted:#9aa9a1; --line:#2c3a34;
+  --wood:#a9c7b8; --accent:#e0a646; --accent-ink:#f0c47a;
+  --ok:#7fd3a0; --ok-bg:#1d3527; --no:#f0927f; --no-bg:#3a201b; --mb:#f0c47a; --mb-bg:#3a2e14; --todo:#c3b0f0; --todo-bg:#2a2340;
+  --danger:#ff8a7a; color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.7}
+.wrap{max-width:760px;margin:0 auto;padding:24px 16px 64px}
+[hidden]{display:none!important}
+.eyebrow{font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;color:var(--accent-ink)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(1.5rem,6vw,2rem);color:var(--wood);margin:2px 0 4px;line-height:1.3}
+.lead{color:var(--muted);font-size:.92rem;margin:0}
+.strings{display:grid;gap:4px;margin:14px 0 20px}
+.strings i{display:block;height:1px;background:var(--line)}
+.strings i:nth-child(n+4){background:color-mix(in srgb,var(--accent) 55%,var(--line))}
+.strings i:nth-child(6){height:3px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px}
+input[type=password]{font:inherit;width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg)}
+button{font:inherit;cursor:pointer}
+.btn{border:0;border-radius:10px;background:var(--wood);color:var(--bg);font-weight:700;padding:10px 18px}
+.btn-sub{border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--fg);font-size:.85rem;font-weight:700;padding:6px 14px}
+.login{display:grid;gap:10px;max-width:360px}
+.error{color:var(--danger);font-weight:700;font-size:.9rem;margin:0}
+
+.toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;justify-content:space-between;margin-bottom:12px}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.filters button{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:5px 12px;font-size:.85rem;font-weight:700}
+.filters button[aria-pressed="true"]{background:var(--wood);border-color:var(--wood);color:var(--bg)}
+.note{font-size:.85rem;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:10px;padding:10px 12px;margin-bottom:12px}
+.list{display:grid;gap:12px}
+
+.item-head{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.kind{display:inline-block;font-size:.72rem;font-weight:700;border-radius:6px;padding:1px 8px;margin-right:6px;vertical-align:2px}
+.kind.ack{background:var(--ok-bg);color:var(--ok)}
+.kind.rsvp{background:var(--mb-bg);color:var(--mb)}
+.item h2{font-size:1.05rem;margin:0;line-height:1.45;display:inline}
+.meta{font-size:.8rem;color:var(--muted);margin-top:4px}
+.meta .due{font-weight:700;color:var(--danger)}
+.meta .past{text-decoration:line-through}
+.rate{font-family:var(--mono);font-size:1.25rem;color:var(--wood);white-space:nowrap;text-align:right;line-height:1.1}
+.rate small{display:block;font-family:var(--body);font-size:.7rem;color:var(--muted)}
+
+.bar{display:flex;height:8px;border-radius:999px;overflow:hidden;background:var(--line);margin:12px 0 10px;gap:2px}
+.bar i{display:block;height:100%}
+.bar .ok,.bar .yes{background:var(--ok)} .bar .no{background:var(--no)} .bar .maybe{background:var(--mb)}
+
+.groups{display:grid;gap:8px}
+.group{display:grid;grid-template-columns:6.2em 1fr;gap:8px;align-items:start}
+.group-label{font-size:.8rem;font-weight:700;padding-top:3px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:.82rem;border-radius:999px;padding:2px 10px;line-height:1.6}
+.chip small{color:inherit;opacity:.7;margin-left:3px;font-size:.72rem}
+.g-ack .chip,.g-yes .chip{background:var(--ok-bg);color:var(--ok)}
+.g-no .chip{background:var(--no-bg);color:var(--no)}
+.g-maybe .chip{background:var(--mb-bg);color:var(--mb)}
+.g-todo .chip{background:var(--todo-bg);color:var(--todo)}
+.g-ack .group-label,.g-yes .group-label{color:var(--ok)} .g-no .group-label{color:var(--no)} .g-maybe .group-label{color:var(--mb)} .g-todo .group-label{color:var(--todo)}
+.empty{font-size:.82rem;color:var(--muted)}
+.copy{margin-top:10px}
+.status{color:var(--muted);font-size:.9rem;text-align:center;padding:24px 0}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--wood);color:var(--bg);padding:8px 16px;border-radius:999px;font-size:.88rem;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">ADMIN ・ 管理人専用</div>
+    <h1>お知らせの対応状況</h1>
+    <p class="lead">LINEの「#お知らせ」「#出欠」への部員の回答をまとめて確認できます。</p>
+    <div class="strings" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  </header>
+
+  <section id="login" class="card">
+    <form class="login" id="login-form">
+      <label for="pw" style="font-weight:700">管理人パスワード</label>
+      <input type="password" id="pw" autocomplete="current-password" required>
+      <button class="btn" type="submit" id="login-btn">表示する</button>
+      <p class="error" id="login-error" hidden></p>
+    </form>
+  </section>
+
+  <section id="dash" hidden>
+    <div class="toolbar">
+      <div class="filters" role="group" aria-label="絞り込み">
+        <button type="button" data-f="all" aria-pressed="true">すべて</button>
+        <button type="button" data-f="todo" aria-pressed="false">未回答あり</button>
+        <button type="button" data-f="rsvp" aria-pressed="false">出欠のみ</button>
+      </div>
+      <button class="btn-sub" type="button" id="reload">最新にする</button>
+    </div>
+    <div class="note" id="note" hidden></div>
+    <div class="list" id="list"></div>
+    <p class="status" id="status"></p>
+  </section>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ===== 設定（ここを書き換えてください） ===== */
+var CONFIG = {
+  API_URL: ''   // GASのWebアプリURL（…/exec）。index.html と同じもの
+};
+</script>
+<script>
+(function(){
+  var $ = function(s){ return document.querySelector(s); };
+  var LABELS = { ack:'確認済み', yes:'参加', no:'不参加', maybe:'未定' };
+  var password = '', data = null, filter = 'all';
+
+  function store(k, v){ try{ if(v === null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, v); }catch(e){} }
+  function load(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } }
+  function el(tag, cls, text){ var e = document.createElement(tag); if(cls) e.className = cls; if(text != null) e.textContent = text; return e; }
+
+  function api(body){
+    if(!CONFIG.API_URL) return Promise.reject(new Error('API_URL が設定されていません。'));
+    return fetch(CONFIG.API_URL, { method:'POST', headers:{ 'Content-Type':'text/plain;charset=utf-8' }, body: JSON.stringify(body) })
+      .then(function(r){ return r.json(); })
+      .then(function(j){ if(!j || !j.ok) throw new Error((j && j.error) || '通信に失敗しました。'); return j; });
+  }
+
+  function today(){ var d = new Date(); return d.getFullYear() + '-' + ('0'+(d.getMonth()+1)).slice(-2) + '-' + ('0'+d.getDate()).slice(-2); }
+  function md(ms){ var d = new Date(ms); return (d.getMonth()+1) + '/' + d.getDate() + ' ' + d.getHours() + ':' + ('0'+d.getMinutes()).slice(-2); }
+  function dl(s){ var p = s.split('-'); var d = new Date(+p[0], +p[1]-1, +p[2]); return Number(p[1]) + '/' + Number(p[2]) + '（' + '日月火水木金土'[d.getDay()] + '）'; }
+
+  function toast(msg){ var t = $('#toast'); t.textContent = msg; t.hidden = false; setTimeout(function(){ t.hidden = true; }, 1800); }
+
+  function fetchStatus(){
+    $('#status').textContent = '読み込んでいます…';
+    return api({ action:'lineStatus', password: password }).then(function(res){
+      data = res; render();
+    });
+  }
+
+  function render(){
+    var list = $('#list'); list.textContent = '';
+    var note = [];
+    if(!data.memberCount) note.push('名簿（membersシート）がまだ空です。「本名」を入力すると、未回答者が表示されます。');
+    else if(data.unlinkedCount) note.push('名簿 ' + data.memberCount + '人のうち ' + data.unlinkedCount + '人は、まだ一度もボタンを押していません（初回に名前を選ぶと紐づきます）。');
+    $('#note').hidden = !note.length; $('#note').textContent = note.join(' ');
+
+    var t = today();
+    var items = data.items.filter(function(it){
+      if(filter === 'todo') return it.unanswered.length > 0;
+      if(filter === 'rsvp') return it.kind === 'rsvp';
+      return true;
+    });
+    $('#status').textContent = items.length ? '' : (data.items.length ? '条件に合うお知らせはありません。' : 'LINEから掲載したお知らせはまだありません。');
+
+    items.forEach(function(it){
+      var card = el('article', 'card item');
+      var head = el('div', 'item-head');
+      var left = el('div');
+      left.appendChild(el('span', 'kind ' + it.kind, it.kind === 'rsvp' ? '出欠' : 'お知らせ'));
+      left.appendChild(el('h2', null, it.title));
+      var meta = el('div', 'meta');
+      meta.appendChild(document.createTextNode('投稿 ' + md(it.createdAt)));
+      if(it.deadline){
+        meta.appendChild(document.createTextNode('　'));
+        var due = el('span', 'due' + (it.deadline < t ? ' past' : ''), '締切 ' + dl(it.deadline) + (it.deadline < t ? ' 終了' : ''));
+        meta.appendChild(due);
+      }
+      left.appendChild(meta);
+      head.appendChild(left);
+
+      var answeredCount = Object.keys(it.groups).reduce(function(s, k){ return s + it.groups[k].length; }, 0);
+      var total = answeredCount + it.unanswered.length;
+      var rate = el('div', 'rate', answeredCount + '/' + total);
+      rate.appendChild(el('small', null, it.kind === 'rsvp' ? '回答済み' : '確認済み'));
+      head.appendChild(rate);
+      card.appendChild(head);
+
+      var bar = el('div', 'bar'); bar.setAttribute('aria-hidden', 'true');
+      Object.keys(it.groups).forEach(function(k){
+        if(!it.groups[k].length || !total) return;
+        var i = el('i', k === 'ack' ? 'ok' : k); i.style.width = (it.groups[k].length / total * 100) + '%'; bar.appendChild(i);
+      });
+      card.appendChild(bar);
+
+      var groups = el('div', 'groups');
+      Object.keys(it.groups).forEach(function(k){ groups.appendChild(group('g-' + k, LABELS[k], it.groups[k])); });
+      groups.appendChild(group('g-todo', '未回答', it.unanswered));
+      card.appendChild(groups);
+
+      if(it.unanswered.length){
+        var cp = el('button', 'btn-sub copy', '未回答者の名前をコピー');
+        cp.type = 'button';
+        cp.addEventListener('click', function(){
+          var text = '【' + it.title + '】未回答の方：' + it.unanswered.map(function(u){ return u.name + 'さん'; }).join('、');
+          copy(text);
+        });
+        card.appendChild(cp);
+      }
+      list.appendChild(card);
+    });
+  }
+
+  function group(cls, label, people){
+    var g = el('div', 'group ' + cls);
+    g.appendChild(el('div', 'group-label', label + ' ' + people.length));
+    var chips = el('div', 'chips');
+    if(!people.length) chips.appendChild(el('span', 'empty', '—'));
+    people.forEach(function(p){
+      var c = el('span', 'chip', p.name);
+      if(p.part) c.appendChild(el('small', null, p.part));
+      chips.appendChild(c);
+    });
+    g.appendChild(chips);
+    return g;
+  }
+
+  function copy(text){
+    var done = function(){ toast('コピーしました'); };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done, function(){ fallback(text); done(); });
+    } else { fallback(text); done(); }
+  }
+  function fallback(text){
+    var ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} document.body.removeChild(ta);
+  }
+
+  function enter(pw){
+    password = pw;
+    $('#login-btn').disabled = true; $('#login-error').hidden = true;
+    return fetchStatus().then(function(){
+      store('agc-admin-pw', pw);
+      $('#login').hidden = true; $('#dash').hidden = false;
+    }).catch(function(e){
+      store('agc-admin-pw', null);
+      $('#login').hidden = false; $('#dash').hidden = true;
+      $('#login-error').textContent = e.message; $('#login-error').hidden = false;
+    }).finally(function(){ $('#login-btn').disabled = false; });
+  }
+
+  $('#login-form').addEventListener('submit', function(e){ e.preventDefault(); enter($('#pw').value); });
+  $('#reload').addEventListener('click', function(){
+    var b = this; b.disabled = true;
+    fetchStatus().then(function(){ toast('最新にしました'); }).catch(function(e){ $('#status').textContent = e.message; }).finally(function(){ b.disabled = false; });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.filters button'), function(b){
+    b.addEventListener('click', function(){
+      filter = b.getAttribute('data-f');
+      Array.prototype.forEach.call(document.querySelectorAll('.filters button'), function(x){ x.setAttribute('aria-pressed', String(x === b)); });
+      if(data) render();
+    });
+  });
+
+  var saved = load('agc-admin-pw');
+  if(saved) enter(saved);
+})();
+</script>
+</body>
+</html>

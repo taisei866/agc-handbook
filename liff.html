@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>アコサー 回答</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#f3f5f1; --surface:#fff; --fg:#1d2a24; --muted:#5d6b64; --line:#d6ddd7;
+  --wood:#2f4a3e; --accent:#b07a1e; --accent-ink:#7a520c; --ok:#2f7d4f; --ok-bg:#e3f2e8; --no:#b4432f; --danger:#c0392b;
+  --display:"Dela Gothic One","Zen Kaku Gothic New",system-ui,sans-serif;
+  --body:"Zen Kaku Gothic New","Hiragino Sans","Noto Sans JP",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#121a17; --surface:#1a2420; --fg:#e7ece9; --muted:#9aa9a1; --line:#2c3a34;
+  --wood:#a9c7b8; --accent:#e0a646; --accent-ink:#f0c47a; --ok:#7fd3a0; --ok-bg:#1d3527; --no:#f0927f; --danger:#ff8a7a; color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.7}
+main{max-width:480px;margin:0 auto;padding:24px 16px calc(32px + env(safe-area-inset-bottom))}
+[hidden]{display:none!important}
+.label{font-size:.78rem;font-weight:700;letter-spacing:.08em;color:var(--accent-ink)}
+h1{font-family:var(--display);font-weight:400;font-size:1.35rem;line-height:1.4;margin:4px 0 0;color:var(--wood);text-wrap:balance}
+.deadline{display:inline-block;margin-top:6px;font-size:.85rem;font-weight:700;color:var(--danger)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.stack>*+*{margin-top:16px}
+.muted{color:var(--muted);font-size:.9rem}
+
+/* 記録完了 */
+.done{text-align:center;padding:28px 18px}
+.check{width:72px;height:72px;margin:0 auto 12px;border-radius:50%;background:var(--ok-bg);display:grid;place-items:center}
+.check svg{width:38px;height:38px;stroke:var(--ok);stroke-width:3.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.check path{stroke-dasharray:40;stroke-dashoffset:40;animation:draw .45s .1s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@media (prefers-reduced-motion: reduce){.check path{animation:none;stroke-dashoffset:0}}
+.done-title{font-weight:700;font-size:1.15rem}
+.done-sub{margin-top:4px}
+.closing{margin-top:10px;font-size:.82rem;color:var(--muted)}
+
+/* ボタン */
+.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.choices.one{grid-template-columns:1fr}
+button{font:inherit;cursor:pointer}
+.choice{min-height:52px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);font-weight:700}
+.choice[aria-pressed="true"]{border-color:var(--wood);background:var(--wood);color:var(--bg)}
+.choice:disabled{opacity:.6;cursor:default}
+.btn-ghost{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:.9rem;padding:6px}
+.row-center{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+
+/* 本文 */
+details{border-top:1px solid var(--line);padding-top:12px}
+summary{cursor:pointer;font-weight:700;color:var(--wood);font-size:.92rem}
+.body{white-space:pre-wrap;word-break:break-word;margin-top:8px;font-size:.95rem}
+.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.links a{font-size:.88rem;font-weight:700;color:var(--wood);border:1px solid var(--line);border-radius:999px;padding:4px 12px;text-decoration:none}
+
+/* 名前選択 */
+.names{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;max-height:52vh;overflow:auto;padding:2px}
+.name{min-height:48px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);text-align:left;padding:8px 12px;line-height:1.3}
+.name small{display:block;color:var(--muted);font-size:.75rem}
+.name:active{border-color:var(--wood)}
+.error{color:var(--danger);font-weight:700}
+.spinner{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--wood);border-radius:50%;margin:40px auto 12px;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<main>
+  <!-- 読み込み中 -->
+  <section id="v-loading" style="text-align:center">
+    <div class="spinner" aria-hidden="true"></div>
+    <p class="muted" id="loading-text">記録しています…</p>
+  </section>
+
+  <!-- エラー -->
+  <section id="v-error" class="card stack" hidden>
+    <p class="error" id="error-text"></p>
+    <p class="muted">時間をおいて、LINEのカードからもう一度開いてください。</p>
+    <div class="row-center"><button class="btn-ghost" id="error-close" type="button">閉じる</button></div>
+  </section>
+
+  <!-- 初回の名前選択 -->
+  <section id="v-name" class="stack" hidden>
+    <div>
+      <div class="label">はじめての方へ（最初の1回だけ）</div>
+      <h1>あなたの名前を選んでください</h1>
+      <p class="muted">次回からは選ばなくても、ボタンを押すだけで記録されます。</p>
+    </div>
+    <div class="names" id="name-list"></div>
+    <div class="row-center"><button class="btn-ghost" id="name-none" type="button">名簿に自分の名前がない</button></div>
+    <p class="error" id="name-error" hidden></p>
+  </section>
+
+  <!-- お知らせ本体 -->
+  <section id="v-main" class="stack" hidden>
+    <div class="card done" id="done" hidden>
+      <div class="check" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M10 21l7 7 14-15"/></svg></div>
+      <div class="done-title" id="done-title">記録しました</div>
+      <div class="done-sub muted" id="done-sub"></div>
+      <div class="closing" id="closing" hidden>まもなく自動で閉じます</div>
+    </div>
+
+    <div class="card stack">
+      <div>
+        <div class="label" id="kind-label">お知らせ</div>
+        <h1 id="title"></h1>
+        <span class="deadline" id="deadline" hidden></span>
+      </div>
+      <div id="answer-area">
+        <p class="muted" id="answer-hint" style="margin:0 0 8px"></p>
+        <div class="choices" id="choices"></div>
+      </div>
+      <details id="detail">
+        <summary>お知らせの全文を見る</summary>
+        <div class="body" id="body"></div>
+        <div class="links" id="links"></div>
+      </details>
+    </div>
+    <div class="row-center"><button class="btn-ghost" id="close" type="button">閉じる</button></div>
+  </section>
+</main>
+
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script>
+/* ===== 設定（ここを書き換えてください） ===== */
+var CONFIG = {
+  API_URL: 'https://script.google.com/macros/s/AKfycby8miKdfcxW3Uw8TugT2qtXbe8WXSASv06I6Cbf5aU1EEyEuvWpzDZ-u3_Ajbz2lOKo/exec',   // GASのWebアプリURL（…/exec）。index.html と同じもの
+  LIFF_ID: '2012029041-NBpt4Wkx'    // LIFFアプリのID（例：2001234567-AbCdEfGh）
+};
+</script>
+<script>
+(function(){
+  var $ = function(s){ return document.querySelector(s); };
+  var LABELS = { ack:{ ack:'確認しました' }, rsvp:{ yes:'参加', no:'不参加', maybe:'未定' } };
+  var params = new URLSearchParams(location.search);
+  var newsId = params.get('n') || '';
+  var firstAnswer = params.get('a') || '';
+  var idToken = '', state = null, closeTimer = null;
+
+  function show(id){
+    ['#v-loading','#v-error','#v-name','#v-main'].forEach(function(s){ $(s).hidden = (s !== id); });
+  }
+  function fail(msg){ cancelClose(); $('#error-text').textContent = msg; show('#v-error'); }
+
+  function api(data){
+    return fetch(CONFIG.API_URL, {
+      method:'POST', headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+      body: JSON.stringify(data)
+    }).then(function(r){ return r.json(); }).then(function(j){
+      if(!j || !j.ok) throw new Error((j && j.error) || '通信に失敗しました。');
+      return j;
+    });
+  }
+
+  function closeWindow(){
+    try{ if(window.liff && liff.isInClient()) { liff.closeWindow(); return; } }catch(e){}
+    try{ window.close(); }catch(e){}
+  }
+  function scheduleClose(){
+    cancelClose();
+    var inClient = false; try{ inClient = liff.isInClient(); }catch(e){}
+    if(!inClient) return;
+    $('#closing').hidden = false;
+    closeTimer = setTimeout(closeWindow, 2200);
+  }
+  function cancelClose(){
+    if(closeTimer){ clearTimeout(closeTimer); closeTimer = null; }
+    $('#closing').hidden = true;
+  }
+  // 画面を触ったら自動で閉じない（回答の変更や全文を読みたい人のため）
+  ['touchstart','mousedown','keydown','scroll'].forEach(function(ev){
+    document.addEventListener(ev, function(){ if(closeTimer) cancelClose(); }, { passive:true });
+  });
+
+  function fmtDeadline(s){
+    if(!s) return '';
+    var p = s.split('-'); var d = new Date(Number(p[0]), Number(p[1])-1, Number(p[2]));
+    return '締切 ' + Number(p[1]) + '/' + Number(p[2]) + '（' + '日月火水木金土'[d.getDay()] + '）';
+  }
+
+  function render(res, justRecorded){
+    state = res;
+    var it = res.item, kind = it.kind;
+    $('#kind-label').textContent = kind === 'rsvp' ? '出欠確認' : 'お知らせ';
+    $('#title').textContent = it.title;
+    var dl = fmtDeadline(it.deadline);
+    $('#deadline').hidden = !dl; $('#deadline').textContent = dl;
+
+    var body = (it.body || '').replace(/\n*出欠はLINEグループのカードから回答してください。/, '').replace(/\n*（LINEグループより[^）]*）\s*$/, '').trim();
+    $('#body').textContent = body || '（本文はありません）';
+    var links = $('#links'); links.textContent = '';
+    (it.links || []).forEach(function(l){
+      if(!/^https?:\/\//.test(l.url || '')) return;
+      var a = document.createElement('a'); a.href = l.url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = l.label || 'リンクを開く';
+      links.appendChild(a);
+    });
+
+    // 完了表示
+    var done = $('#done');
+    if(res.myAnswer){
+      done.hidden = false;
+      var label = LABELS[kind][res.myAnswer] || '';
+      $('#done-title').textContent = kind === 'rsvp' ? '「' + label + '」で記録しました' : '確認を記録しました';
+      $('#done-sub').textContent = (res.myName ? res.myName + ' さん' : '') + (kind === 'rsvp' ? '　あとから変更もできます' : '');
+    } else {
+      done.hidden = true;
+    }
+
+    // ボタン
+    var area = $('#choices'); area.textContent = '';
+    if(kind === 'rsvp'){
+      area.className = 'choices';
+      $('#answer-hint').textContent = res.myAnswer ? '変更するときは選び直してください' : '回答を選んでください';
+      Object.keys(LABELS.rsvp).forEach(function(k){
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'choice'; b.textContent = LABELS.rsvp[k];
+        b.setAttribute('aria-pressed', String(res.myAnswer === k));
+        b.addEventListener('click', function(){ answer(k); });
+        area.appendChild(b);
+      });
+      $('#answer-area').hidden = false;
+    } else {
+      $('#answer-area').hidden = true;
+    }
+
+    show('#v-main');
+    if(justRecorded && res.myAnswer) scheduleClose();
+  }
+
+  function answer(k){
+    cancelClose();
+    if(state && state.myAnswer === k) return;
+    Array.prototype.forEach.call(document.querySelectorAll('.choice'), function(b){ b.disabled = true; });
+    api({ action:'lineRespond', idToken:idToken, newsId:newsId, answer:k })
+      .then(function(res){ render(res, true); })
+      .catch(function(e){ fail(e.message); });
+  }
+
+  function askName(res, afterLink){
+    var list = $('#name-list'); list.textContent = '';
+    (res.names || []).forEach(function(n){
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'name';
+      b.appendChild(document.createTextNode(n.name));
+      if(n.part){ var s = document.createElement('small'); s.textContent = n.part; b.appendChild(s); }
+      b.addEventListener('click', function(){ link(n.name, afterLink); });
+      list.appendChild(b);
+    });
+    if(!(res.names || []).length){
+      var p = document.createElement('p'); p.className = 'muted'; p.textContent = '選べる名前がありません。下の「名簿に自分の名前がない」を押してください。';
+      list.appendChild(p);
+    }
+    $('#name-none').onclick = function(){ link('__none__', afterLink); };
+    show('#v-name');
+  }
+
+  function link(name, afterLink){
+    if(name !== '__none__' && !confirm(name + ' さんで登録します。よろしいですか？')) return;
+    $('#name-error').hidden = true;
+    $('#loading-text').textContent = '登録しています…'; show('#v-loading');
+    api({ action:'lineLink', idToken:idToken, name:name })
+      .then(function(r){ state.myName = r.myName; state.needName = false; afterLink(); })
+      .catch(function(e){ show('#v-name'); $('#name-error').textContent = e.message; $('#name-error').hidden = false; });
+  }
+
+  $('#close').addEventListener('click', closeWindow);
+  $('#error-close').addEventListener('click', closeWindow);
+
+  async function start(){
+    if(!CONFIG.API_URL || !CONFIG.LIFF_ID) return fail('設定（API_URL・LIFF_ID）がまだ入っていません。');
+    if(!window.liff) return fail('LINEの読み込みに失敗しました。');
+    try{
+      await liff.init({ liffId: CONFIG.LIFF_ID });
+    }catch(e){ return fail('LINEの読み込みに失敗しました。'); }
+    if(!liff.isLoggedIn()){ liff.login({ redirectUri: location.href }); return; }
+    params = new URLSearchParams(location.search);
+    newsId = params.get('n') || newsId; firstAnswer = params.get('a') || firstAnswer;
+    if(!newsId) return fail('お知らせが指定されていません。LINEのカードから開いてください。');
+    idToken = liff.getIDToken() || '';
+    if(!idToken) return fail('LINEのログイン情報を取得できませんでした。');
+
+    if(!firstAnswer) $('#loading-text').textContent = '読み込んでいます…';
+    try{
+      var res = await api({ action:'lineRespond', idToken:idToken, newsId:newsId, answer:firstAnswer });
+      state = res;
+      if(res.needName) askName(res, function(){ render(state, res.recorded); });
+      else render(res, res.recorded);
+    }catch(e){ fail(e.message); }
+  }
+  start();
+})();
+</script>
+</body>
+</html>

@@ -178,6 +178,21 @@ legend,.field > label{font-size:.85rem;font-weight:700;color:var(--muted);paddin
 .news-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .news-links .btn{padding:6px 18px;font-size:.92rem}
 .news-actions{justify-content:flex-end;border-top:1px dashed var(--line);padding-top:8px}
+/* LINE連携：出欠・確認ボタン */
+.news-item{scroll-margin-top:72px}
+.news-item.is-target{outline:2px solid var(--accent);outline-offset:2px}
+.line-tag{font-size:.75rem;font-weight:700;border-radius:6px;padding:1px 8px;background:var(--todo-bg);color:var(--todo-fg)}
+.news-deadline{font-size:.82rem;font-weight:700;color:var(--accent-ink)}
+.news-deadline.past{color:var(--muted);text-decoration:line-through}
+.rsvp{display:grid;gap:6px;border-top:1px dashed var(--line);padding-top:10px}
+.rsvp-q{font-size:.85rem;font-weight:700;color:var(--wood)}
+.rsvp-btns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.rsvp-btns.one{grid-template-columns:minmax(0,220px)}
+.rsvp-btns a{display:flex;align-items:center;justify-content:center;min-height:42px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);font-weight:700;font-size:.92rem;text-decoration:none}
+.rsvp-btns a.primary{background:var(--wood);border-color:var(--wood);color:var(--bg)}
+.rsvp-btns a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (max-width:360px){.rsvp-btns{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.rsvp-note{font-size:.75rem;color:var(--muted)}
 .link-row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:6px;margin-bottom:6px}
 @media (max-width:480px){.link-row{grid-template-columns:1fr}}
 header{padding-bottom:16px}
@@ -632,6 +647,7 @@ var CONFIG = {
   API_URL: 'https://script.google.com/macros/s/AKfycbz2O3wPStdHnioWdrUuvA6OfizkZNc1en9GS9TGtxMYNbCOsmV3y4Qdp6-_tbRLtoVObw/exec'
 };
 var LOADERS = {}, CURRENT_PANEL = 'news';
+var INITIAL_HASH = location.hash || '';   // LINEの画面から特定のお知らせ（#news-○○）を開いたとき用
 
 
 /* ===== 共通 ===== */
@@ -854,8 +870,10 @@ var admin = (function(){
     }
     shown.forEach(function(n){
       var card = el('article','post news-item');
+      card.id = 'news-' + n.id;
       var top = el('div','post-top');
       top.appendChild(el('span','kind ' + (n.category === 'tips' ? 'join' : 'recruit'), CAT[n.category] || 'お知らせ'));
+      if(n.lineKind) top.appendChild(el('span','line-tag', n.lineKind === 'rsvp' ? '出欠' : '要確認'));
       top.appendChild(el('span','news-date', fmtDate(n.createdAt, true)));
       card.appendChild(top);
       card.appendChild(el('h3', null, n.title));
@@ -864,7 +882,12 @@ var admin = (function(){
         img.referrerPolicy = 'no-referrer';
         card.appendChild(img);
       }
-      if(n.body) card.appendChild(el('p','post-body', n.body));
+      if(n.deadline){
+        var past = n.deadline < todayStr();
+        card.appendChild(el('div','news-deadline' + (past ? ' past' : ''), '締切 ' + fmtDeadline(n.deadline) + (past ? '（終了）' : '')));
+      }
+      var body = n.lineKind ? n.body.replace(/\n*出欠は[^\n]*回答してください。/, '') : n.body;
+      if(body) card.appendChild(el('p','post-body', body));
       if(n.links.length){
         var row = el('div','news-links');
         n.links.forEach(function(l){
@@ -874,6 +897,7 @@ var admin = (function(){
         });
         card.appendChild(row);
       }
+      if(n.lineKind && n.liffId) card.appendChild(rsvpBox(n));
       if(admin.on){
         var act = el('div','post-actions news-actions');
         if(confirmId === n.id){
@@ -892,6 +916,39 @@ var admin = (function(){
       }
       list.appendChild(card);
     });
+    focusTarget();
+  }
+
+  /* LINE連携：出欠・確認ボタン（押すとLINEの回答画面が開き、本人確認して記録される） */
+  function rsvpBox(n){
+    var box = el('div','rsvp');
+    var base = 'https://liff.line.me/' + n.liffId + '?n=' + encodeURIComponent(n.id) + '&a=';
+    var opts = n.lineKind === 'rsvp'
+      ? [['参加','yes',true],['不参加','no'],['未定','maybe'],['その他','other']]
+      : [['確認しました','ack',true]];
+    box.appendChild(el('div','rsvp-q', n.lineKind === 'rsvp' ? '出欠を回答する' : '読んだら確認を押してください'));
+    var row = el('div','rsvp-btns' + (opts.length === 1 ? ' one' : ''));
+    opts.forEach(function(o){
+      var a = el('a', o[2] ? 'primary' : null, o[0]);
+      a.href = base + o[1]; a.target = '_blank'; a.rel = 'noopener';
+      row.appendChild(a);
+    });
+    box.appendChild(row);
+    box.appendChild(el('div','rsvp-note','LINEが開いて、本人確認のうえ記録されます。' + (n.lineKind === 'rsvp' ? 'あとから変更もできます。' : '')));
+    return box;
+  }
+  function todayStr(){ var d = new Date(); return d.getFullYear() + '-' + ('0'+(d.getMonth()+1)).slice(-2) + '-' + ('0'+d.getDate()).slice(-2); }
+  function fmtDeadline(s){ var p = s.split('-'); var d = new Date(+p[0], +p[1]-1, +p[2]); return (+p[1]) + '/' + (+p[2]) + '（' + '日月火水木金土'[d.getDay()] + '）'; }
+  var targetDone = false;
+  function focusTarget(){
+    if(targetDone) return;
+    var m = /^#news-(.+)$/.exec(INITIAL_HASH);
+    if(!m){ targetDone = true; return; }
+    var t = document.getElementById('news-' + decodeURIComponent(m[1]));
+    if(!t) return;                       // まだ読み込み中なら次の描画で
+    targetDone = true;
+    t.classList.add('is-target');
+    setTimeout(function(){ try{ t.scrollIntoView({block:'start', behavior:'smooth'}); }catch(e){ t.scrollIntoView(); } }, 60);
   }
 
   async function load(){
@@ -905,7 +962,10 @@ var admin = (function(){
           title: String(b.title || '').slice(0,60), body: String(b.body || '').slice(0,2000),
           image: safeHttps(b.image),
           links: (Array.isArray(b.links) ? b.links : []).map(function(l){ return {label: String((l && l.label) || '').slice(0,30), url: safeHttps(l && l.url)}; }).filter(function(l){ return l.url; }).slice(0,3),
-          createdAt: Number(b.createdAt) || 0
+          createdAt: Number(b.createdAt) || 0,
+          lineKind: b.lineKind === 'rsvp' || b.lineKind === 'ack' ? b.lineKind : '',
+          deadline: /^\d{4}-\d{2}-\d{2}$/.test(b.deadline || '') ? b.deadline : '',
+          liffId: /^\d{10}-[A-Za-z0-9]{8}$/.test(b.liffId || '') ? b.liffId : ''
         };
       });
       loaded = true; statusEl.textContent = '';

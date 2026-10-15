@@ -179,7 +179,7 @@ var CONFIG = {
       left.appendChild(el('h2', null, it.title));
       var meta = el('div', 'meta');
       meta.appendChild(document.createTextNode('投稿 ' + md(it.createdAt)));
-      if(it.deadline){
+      if(/^\d{4}-\d{2}-\d{2}$/.test(it.deadline || '')){
         meta.appendChild(document.createTextNode('　'));
         var due = el('span', 'due' + (it.deadline < t ? ' past' : ''), '締切 ' + dl(it.deadline) + (it.deadline < t ? ' 終了' : ''));
         meta.appendChild(due);

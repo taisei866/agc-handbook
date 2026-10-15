@@ -40,12 +40,24 @@ h1{font-family:var(--display);font-weight:400;font-size:1.35rem;line-height:1.4;
 .closing{margin-top:10px;font-size:.82rem;color:var(--muted)}
 
 /* ボタン */
-.choices{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.choices{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .choices.one{grid-template-columns:1fr}
 button{font:inherit;cursor:pointer}
 .choice{min-height:52px;border-radius:12px;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);font-weight:700}
 .choice[aria-pressed="true"]{border-color:var(--wood);background:var(--wood);color:var(--bg)}
 .choice:disabled{opacity:.6;cursor:default}
+.btn{border:0;border-radius:10px;background:var(--wood);color:var(--bg);font-weight:700;padding:10px 18px;min-height:44px}
+.btn:disabled{opacity:.6}
+.btn-sub{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:999px;background:var(--surface);color:var(--wood);font-weight:700;font-size:.92rem;padding:8px 16px;text-decoration:none}
+.btn-sub svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.other-box{margin-top:12px;display:grid;gap:8px}
+.other-box label{font-size:.85rem;font-weight:700}
+.other-box textarea{font:inherit;font-size:16px;width:100%;resize:vertical;min-height:84px;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg)}
+.other-box textarea:focus{outline:2px solid var(--wood);outline-offset:1px}
+.other-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.count{font-size:.78rem;color:var(--muted)}
+.comment{margin-top:6px;font-size:.92rem;background:var(--bg);border-radius:8px;padding:6px 10px;display:inline-block;max-width:100%;word-break:break-word}
+.row-center.stack-sm{flex-direction:column;align-items:center;gap:6px}
 .btn-ghost{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:.9rem;padding:6px}
 .row-center{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
 
@@ -99,6 +111,7 @@ summary{cursor:pointer;font-weight:700;color:var(--wood);font-size:.92rem}
       <div class="check" aria-hidden="true"><svg viewBox="0 0 40 40"><path d="M10 21l7 7 14-15"/></svg></div>
       <div class="done-title" id="done-title">記録しました</div>
       <div class="done-sub muted" id="done-sub"></div>
+      <div class="comment" id="done-comment" hidden></div>
       <div class="closing" id="closing" hidden>まもなく自動で閉じます</div>
     </div>
 
@@ -111,6 +124,14 @@ summary{cursor:pointer;font-weight:700;color:var(--wood);font-size:.92rem}
       <div id="answer-area">
         <p class="muted" id="answer-hint" style="margin:0 0 8px"></p>
         <div class="choices" id="choices"></div>
+        <div class="other-box" id="other-box" hidden>
+          <label for="other-text">「その他」の内容</label>
+          <textarea id="other-text" maxlength="100" placeholder="例：途中から参加します／遅れて行きます"></textarea>
+          <div class="other-row">
+            <span class="count" id="other-count">0 / 100</span>
+            <button class="btn" type="button" id="other-send">この内容で送信</button>
+          </div>
+        </div>
       </div>
       <details id="detail">
         <summary>お知らせの全文を見る</summary>
@@ -118,7 +139,13 @@ summary{cursor:pointer;font-weight:700;color:var(--wood);font-size:.92rem}
         <div class="links" id="links"></div>
       </details>
     </div>
-    <div class="row-center"><button class="btn-ghost" id="close" type="button">閉じる</button></div>
+    <div class="row-center stack-sm">
+      <a class="btn-sub" id="to-site" href="#" hidden>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 13h5"/></svg>
+        お知らせページを見る
+      </a>
+      <button class="btn-ghost" id="close" type="button">閉じる</button>
+    </div>
   </section>
 </main>
 
@@ -126,14 +153,15 @@ summary{cursor:pointer;font-weight:700;color:var(--wood);font-size:.92rem}
 <script>
 /* ===== 設定（ここを書き換えてください） ===== */
 var CONFIG = {
-  API_URL: 'https://script.google.com/macros/s/AKfycby8miKdfcxW3Uw8TugT2qtXbe8WXSASv06I6Cbf5aU1EEyEuvWpzDZ-u3_Ajbz2lOKo/exec',   // GASのWebアプリURL（…/exec）。index.html と同じもの
-  LIFF_ID: '2012029041-NBpt4Wkx'    // LIFFアプリのID（例：2001234567-AbCdEfGh）
+  API_URL: 'https://script.google.com/macros/s/AKfycbz2O3wPStdHnioWdrUuvA6OfizkZNc1en9GS9TGtxMYNbCOsmV3y4Qdp6-_tbRLtoVObw/exec',
+  LIFF_ID: '',   // 空のままでOK（GASのスクリプト プロパティ LIFF_ID を自動で読み込みます）
+  SITE_URL: ''   // 空のままでOK（liff.html と同じ場所の index.html を開きます）
 };
 </script>
 <script>
 (function(){
   var $ = function(s){ return document.querySelector(s); };
-  var LABELS = { ack:{ ack:'確認しました' }, rsvp:{ yes:'参加', no:'不参加', maybe:'未定' } };
+  var LABELS = { ack:{ ack:'確認しました' }, rsvp:{ yes:'参加', no:'不参加', maybe:'未定', other:'その他' } };
   var params = new URLSearchParams(location.search);
   var newsId = params.get('n') || '';
   var firstAnswer = params.get('a') || '';
@@ -188,7 +216,7 @@ var CONFIG = {
     var dl = fmtDeadline(it.deadline);
     $('#deadline').hidden = !dl; $('#deadline').textContent = dl;
 
-    var body = (it.body || '').replace(/\n*出欠はLINEグループのカードから回答してください。/, '').replace(/\n*（LINEグループより[^）]*）\s*$/, '').trim();
+    var body = (it.body || '').replace(/\n*出欠は[^\n]*回答してください。/, '').replace(/\n*（LINEグループより[^）]*）\s*$/, '').trim();
     $('#body').textContent = body || '（本文はありません）';
     var links = $('#links'); links.textContent = '';
     (it.links || []).forEach(function(l){
@@ -204,6 +232,8 @@ var CONFIG = {
       var label = LABELS[kind][res.myAnswer] || '';
       $('#done-title').textContent = kind === 'rsvp' ? '「' + label + '」で記録しました' : '確認を記録しました';
       $('#done-sub').textContent = (res.myName ? res.myName + ' さん' : '') + (kind === 'rsvp' ? '　あとから変更もできます' : '');
+      $('#done-comment').hidden = !(res.myAnswer === 'other' && res.myComment);
+      $('#done-comment').textContent = res.myComment || '';
     } else {
       done.hidden = true;
     }
@@ -217,26 +247,62 @@ var CONFIG = {
         var b = document.createElement('button');
         b.type = 'button'; b.className = 'choice'; b.textContent = LABELS.rsvp[k];
         b.setAttribute('aria-pressed', String(res.myAnswer === k));
-        b.addEventListener('click', function(){ answer(k); });
+        b.addEventListener('click', function(){ if(k === 'other') openOther(); else answer(k); });
         area.appendChild(b);
       });
       $('#answer-area').hidden = false;
+      $('#other-box').hidden = true;
     } else {
       $('#answer-area').hidden = true;
     }
 
+    $('#to-site').hidden = !newsId;
     show('#v-main');
     if(justRecorded && res.myAnswer) scheduleClose();
   }
 
-  function answer(k){
+  function answer(k, comment){
     cancelClose();
-    if(state && state.myAnswer === k) return;
+    if(state && state.myAnswer === k && k !== 'other') return;
     Array.prototype.forEach.call(document.querySelectorAll('.choice'), function(b){ b.disabled = true; });
-    api({ action:'lineRespond', idToken:idToken, newsId:newsId, answer:k })
+    $('#other-send').disabled = true;
+    api({ action:'lineRespond', idToken:idToken, newsId:newsId, answer:k, comment: comment || '' })
       .then(function(res){ render(res, true); })
-      .catch(function(e){ fail(e.message); });
+      .catch(function(e){ fail(e.message); })
+      .finally(function(){ $('#other-send').disabled = false; });
   }
+
+  // 「その他」：記入欄を開く（送信するまで記録しない）
+  function openOther(){
+    cancelClose();
+    var box = $('#other-box'), ta = $('#other-text');
+    box.hidden = false;
+    Array.prototype.forEach.call(document.querySelectorAll('.choice'), function(b){
+      b.setAttribute('aria-pressed', String(b.textContent === 'その他'));
+    });
+    if(state && state.myAnswer === 'other' && !ta.value) ta.value = state.myComment || '';
+    updateCount();
+    setTimeout(function(){ try{ ta.focus(); }catch(e){} }, 50);
+  }
+  function updateCount(){ $('#other-count').textContent = $('#other-text').value.length + ' / 100'; }
+  $('#other-text').addEventListener('input', updateCount);
+  $('#other-send').addEventListener('click', function(){
+    var v = $('#other-text').value.trim();
+    if(!v){ $('#other-text').focus(); $('#other-count').textContent = '内容を入力してください'; return; }
+    answer('other', v);
+  });
+
+  // お知らせページ（部員ハンドブック）へ
+  function siteUrl(){
+    var base = CONFIG.SITE_URL || new URL('./', location.href).href;
+    return base.replace(/#.*$/, '') + '#news-' + encodeURIComponent(newsId);
+  }
+  $('#to-site').addEventListener('click', function(e){
+    e.preventDefault(); cancelClose();
+    var url = siteUrl();
+    try{ if(window.liff && liff.isInClient()){ liff.openWindow({ url:url, external:false }); return; } }catch(x){}
+    location.href = url;
+  });
 
   function askName(res, afterLink){
     var list = $('#name-list'); list.textContent = '';
@@ -269,7 +335,14 @@ var CONFIG = {
   $('#error-close').addEventListener('click', closeWindow);
 
   async function start(){
-    if(!CONFIG.API_URL || !CONFIG.LIFF_ID) return fail('設定（API_URL・LIFF_ID）がまだ入っていません。');
+    if(!CONFIG.API_URL) return fail('設定（API_URL）がまだ入っていません。');
+    if(!CONFIG.LIFF_ID){
+      try{
+        var cfg = await fetch(CONFIG.API_URL + '?action=lineConfig&t=' + Date.now()).then(function(r){ return r.json(); });
+        CONFIG.LIFF_ID = (cfg && cfg.liffId) || '';
+      }catch(e){}
+      if(!CONFIG.LIFF_ID) return fail('LIFF ID を読み込めませんでした。GASのスクリプト プロパティ LIFF_ID を確認してください。');
+    }
     if(!window.liff) return fail('LINEの読み込みに失敗しました。');
     try{
       await liff.init({ liffId: CONFIG.LIFF_ID });
@@ -283,10 +356,12 @@ var CONFIG = {
 
     if(!firstAnswer) $('#loading-text').textContent = '読み込んでいます…';
     try{
-      var res = await api({ action:'lineRespond', idToken:idToken, newsId:newsId, answer:firstAnswer });
+      var wantOther = firstAnswer === 'other';
+      var res = await api({ action:'lineRespond', idToken:idToken, newsId:newsId, answer: wantOther ? '' : firstAnswer });
       state = res;
-      if(res.needName) askName(res, function(){ render(state, res.recorded); });
-      else render(res, res.recorded);
+      var after = function(){ render(state, res.recorded); if(wantOther && state.item.kind === 'rsvp') openOther(); };
+      if(res.needName) askName(res, after);
+      else after();
     }catch(e){ fail(e.message); }
   }
   start();

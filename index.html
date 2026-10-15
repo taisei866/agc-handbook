@@ -193,6 +193,16 @@ legend,.field > label{font-size:.85rem;font-weight:700;color:var(--muted);paddin
 .rsvp-btns a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media (max-width:360px){.rsvp-btns{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .rsvp-note{font-size:.75rem;color:var(--muted)}
+.todo-count{display:inline-block;min-width:1.4em;margin-left:4px;padding:0 5px;border-radius:999px;background:var(--accent);color:#fff;font-size:.72rem;line-height:1.5}
+.me-bar{margin:4px 0 12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;gap:6px}
+.me-pick{display:grid;gap:8px}
+.me-pick label{font-size:.88rem;font-weight:700}
+.me-row{display:flex;gap:8px;flex-wrap:wrap}
+.me-row select{flex:1 1 180px;min-width:0;font:inherit;padding:8px 10px;border:1.5px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg)}
+.me-show{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:.92rem}
+.notify-field{border-top:1px dashed var(--line);padding-top:10px}
+.notify-check{display:flex;align-items:center;gap:8px;font-weight:700}
+.notify-check input{width:18px;height:18px}
 .link-row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);gap:6px;margin-bottom:6px}
 @media (max-width:480px){.link-row{grid-template-columns:1fr}}
 header{padding-bottom:16px}
@@ -298,7 +308,7 @@ img{max-width:100%}
     </button>
   </div>
   <ul>
-    <li><a href="#news" data-panel="news"><b>お知らせ</b><small>お知らせ・お役立ち情報</small></a></li>
+    <li><a href="#news" data-panel="news"><b>お知らせ</b><small>お知らせ・出欠・未回答</small></a></li>
     <li><a href="#studio" data-panel="studio"><b>スタジオ予約</b><small>きらん・ソリスト・エルム楽器</small></a></li>
     <li><a href="#live" data-panel="live"><b>ライブエントリー</b><small>内部ライブ・外部ライブ</small></a></li>
     <li><a href="#print" data-panel="print"><b>印刷室</b><small>申請方法・利用時間・ルール</small></a></li>
@@ -311,13 +321,28 @@ img{max-width:100%}
 
   <div class="panel" id="p-news">
   <section id="news">
-    <div class="sec-head"><h2>お知らせ・お役立ち情報</h2></div>
+    <div class="sec-head"><h2>お知らせ</h2></div>
     <div class="board-tools">
-      <div class="seg news-seg" role="group" aria-label="種類で絞り込む">
-        <button type="button" data-cat="all" aria-pressed="true">すべて</button>
-        <button type="button" data-cat="info" aria-pressed="false">お知らせ</button>
-        <button type="button" data-cat="tips" aria-pressed="false">お役立ち</button>
+      <div class="seg news-seg" role="group" aria-label="表示を切り替える">
+        <button type="button" data-cat="info" aria-pressed="true">お知らせ</button>
+        <button type="button" data-cat="rsvp" aria-pressed="false">出欠</button>
+        <button type="button" data-cat="todo" aria-pressed="false">未回答<span class="todo-count" id="todo-count" hidden></span></button>
       </div>
+    </div>
+    <div class="me-bar" id="me-bar" hidden>
+      <div id="me-pick" class="me-pick" hidden>
+        <label for="me-select">あなたの名前を選ぶと、まだ回答していないお知らせだけを表示します</label>
+        <div class="me-row">
+          <select id="me-select"><option value="">名前を選んでください</option></select>
+          <button type="button" class="btn" id="me-ok">表示する</button>
+        </div>
+        <small class="hint">名前はこの端末にだけ保存されます。回答の記録はLINEで本人確認して行います。</small>
+      </div>
+      <div id="me-show" class="me-show" hidden>
+        <span><b id="me-name"></b> さんの未回答</span>
+        <button type="button" class="link-btn" id="me-change">名前を変える</button>
+      </div>
+      <p class="hint" id="me-note" hidden></p>
     </div>
     <button type="button" id="news-new" class="btn" hidden>お知らせを書く</button>
     <form id="news-form" class="post-form" hidden novalidate>
@@ -342,6 +367,10 @@ img{max-width:100%}
         <div class="link-row"><input id="n-l1-label" maxlength="30" placeholder="ボタンの文字（例：動画を見る）"><input id="n-l1-url" inputmode="url" placeholder="https://"></div>
         <div class="link-row"><input id="n-l2-label" maxlength="30" placeholder="ボタンの文字"><input id="n-l2-url" inputmode="url" placeholder="https://"></div>
       </fieldset>
+      <div class="field notify-field">
+        <label class="notify-check"><input type="checkbox" id="n-notify" checked> LINEグループにも通知する</label>
+        <small class="hint" id="n-quota">LINEの無料送信数を確認しています…</small>
+      </div>
       <p class="form-error" id="news-error" role="alert"></p>
       <div class="form-actions">
         <button type="submit" class="btn" id="n-submit">投稿する</button>
@@ -859,14 +888,26 @@ var admin = (function(){
   var CAT = {info:'お知らせ', tips:'お役立ち'};
   var statusEl = $('#news-status'), list = $('#news-list'), newBtn = $('#news-new'),
       form = $('#news-form'), errEl = $('#news-error'), submitBtn = $('#n-submit');
-  var items = [], loaded = false, filterCat = 'all', confirmId = null, busy = false, pendingImage = '';
+  var items = [], loaded = false, filterCat = 'info', confirmId = null, busy = false, pendingImage = '';
+  var me = '', answered = null, linked = true, memberNames = null;
+  try{ me = localStorage.getItem('agc-me') || ''; }catch(e){}
 
   function render(){
     list.textContent = '';
     if(!loaded) return;
-    var shown = items.filter(function(n){ return filterCat === 'all' || n.category === filterCat; });
+    var todo = todoItems();
+    var tc = $('#todo-count');
+    tc.hidden = !(me && answered && todo.length); tc.textContent = todo.length;
+    renderMe();
+    var shown = filterCat === 'rsvp' ? items.filter(function(n){ return n.lineKind === 'rsvp'; })
+              : filterCat === 'todo' ? (me && answered ? todo : [])
+              : items.filter(function(n){ return n.lineKind !== 'rsvp'; });
     if(!shown.length){
-      list.appendChild(el('div','empty', items.length ? 'この種類の投稿はまだありません。' : 'まだお知らせはありません。'));
+      if(filterCat === 'todo' && !(me && answered)) return;
+      var msg = filterCat === 'rsvp' ? '出欠の募集はまだありません。'
+              : filterCat === 'todo' ? '未回答のお知らせはありません。'
+              : (items.length ? 'お知らせはまだありません。' : 'まだお知らせはありません。');
+      list.appendChild(el('div','empty', msg));
       return;
     }
     shown.forEach(function(n){
@@ -938,6 +979,62 @@ var admin = (function(){
     box.appendChild(el('div','rsvp-note','LINEが開いて、本人確認のうえ記録されます。' + (n.lineKind === 'rsvp' ? 'あとから変更もできます。' : '')));
     return box;
   }
+  /* 未回答：LINE連携のお知らせのうち、選んだ人がまだ回答しておらず、締切が過ぎていないもの */
+  function todoItems(){
+    if(!answered) return [];
+    var t = todayStr();
+    return items.filter(function(n){
+      return n.lineKind && n.liffId && !answered[n.id] && !(n.deadline && n.deadline < t);
+    });
+  }
+  function renderMe(){
+    var bar = $('#me-bar');
+    bar.hidden = filterCat !== 'todo';
+    if(bar.hidden) return;
+    $('#me-pick').hidden = !!me; $('#me-show').hidden = !me;
+    if(me){
+      $('#me-name').textContent = me;
+      var note = $('#me-note');
+      note.hidden = linked || !answered;
+      note.textContent = 'まだLINEのボタンを一度も押していないため、すべて未回答として表示しています。';
+    } else {
+      $('#me-note').hidden = true;
+      loadNames();
+    }
+  }
+  async function loadNames(){
+    if(memberNames) return;
+    memberNames = [];
+    try{
+      var r = await api.post({action:'lineMembers'});
+      memberNames = r.names || [];
+      var sel = $('#me-select');
+      memberNames.forEach(function(n){ var o = document.createElement('option'); o.value = n; o.textContent = n; sel.appendChild(o); });
+    }catch(e){ memberNames = null; statusEl.textContent = '名簿を読み込めませんでした。' + errText(e); }
+  }
+  async function loadAnswered(){
+    if(!me){ answered = null; return; }
+    try{
+      var r = await api.post({action:'lineAnswered', name: me});
+      answered = {}; (r.answered || []).forEach(function(id){ answered[id] = true; });
+      linked = !!r.linked;
+    }catch(e){
+      if(/名簿/.test(e.message || '')){ me = ''; try{ localStorage.removeItem('agc-me'); }catch(x){} }
+      answered = null;
+    }
+  }
+  $('#me-ok').addEventListener('click', async function(){
+    var v = $('#me-select').value;
+    if(!v) return;
+    me = v; try{ localStorage.setItem('agc-me', v); }catch(e){}
+    statusEl.textContent = '読み込んでいます…';
+    await loadAnswered(); statusEl.textContent = ''; render();
+  });
+  $('#me-change').addEventListener('click', function(){
+    me = ''; answered = null; try{ localStorage.removeItem('agc-me'); }catch(e){}
+    render();
+  });
+
   function todayStr(){ var d = new Date(); return d.getFullYear() + '-' + ('0'+(d.getMonth()+1)).slice(-2) + '-' + ('0'+d.getDate()).slice(-2); }
   function fmtDeadline(s){ var p = s.split('-'); var d = new Date(+p[0], +p[1]-1, +p[2]); return (+p[1]) + '/' + (+p[2]) + '（' + '日月火水木金土'[d.getDay()] + '）'; }
   var targetDone = false;
@@ -969,6 +1066,7 @@ var admin = (function(){
           liffId: /^\d{10}-[A-Za-z0-9]{8}$/.test(b.liffId || '') ? b.liffId : (CONFIG.LIFF_ID || '')
         };
       });
+      if(me) await loadAnswered();
       loaded = true; statusEl.textContent = '';
     }catch(e){
       statusEl.textContent = 'お知らせを読み込めませんでした。' + errText(e);
@@ -1008,7 +1106,19 @@ var admin = (function(){
     form.hidden = !show;
     newBtn.hidden = show || !admin.on;
     errEl.textContent = '';
-    if(show) $('#n-title').focus();
+    if(show){ $('#n-title').focus(); loadQuota(); }
+  }
+  /* LINEの無料送信数（プッシュ通知はグループの人数分の通数を使う） */
+  async function loadQuota(){
+    var q = $('#n-quota'), cb = $('#n-notify');
+    q.textContent = 'LINEの無料送信数を確認しています…'; cb.disabled = false;
+    try{
+      var r = await api.post({action:'lineQuota', password: admin.password});
+      if(!r.available){ q.textContent = '通知できません：' + r.reason; cb.checked = false; cb.disabled = true; return; }
+      if(r.remainingPosts === null){ q.textContent = '通知すると、グループの人数分（' + r.members + '通）を使います。'; return; }
+      q.textContent = '今月あと約' + r.remainingPosts + '回通知できます（1回あたり' + r.members + '通／今月 ' + r.used + '/' + r.limit + '通使用）';
+      if(r.remainingPosts < 1){ cb.checked = false; cb.disabled = true; }
+    }catch(e){ q.textContent = '送信数を確認できませんでした。通知はできる場合があります。'; }
   }
   newBtn.addEventListener('click', function(){ openForm(true); });
   $('#n-cancel').addEventListener('click', function(){ form.reset(); clearImage(); openForm(false); });
@@ -1032,9 +1142,14 @@ var admin = (function(){
     if(!title){ errEl.textContent = 'タイトルを入力してください。'; $('#n-title').focus(); return; }
     busy = true; submitBtn.disabled = true; submitBtn.textContent = '投稿しています…';
     try{
-      await api.post({action:'createNews', password: admin.password, category: category, title: title, body: body, links: links, image: pendingImage});
+      var notify = $('#n-notify').checked && !$('#n-notify').disabled;
+      var res = await api.post({action:'createNews', password: admin.password, category: category, title: title, body: body, links: links, image: pendingImage, notifyLine: notify});
       form.reset(); clearImage(); openForm(false);
       await load();
+      if(notify){
+        statusEl.textContent = res.notified && res.notified.ok ? '投稿しました。LINEグループにも通知しました。'
+          : '投稿しました。' + ((res.notified && res.notified.error) || 'LINEへの通知はできませんでした。');
+      }
     }catch(x){
       admin.rejected(x);
       errEl.textContent = '投稿できませんでした。' + errText(x);

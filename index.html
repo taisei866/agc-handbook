@@ -644,7 +644,8 @@ img{max-width:100%}
 /* ===== 設定 =====
    GAS をウェブアプリとして公開したら、表示された URL をここに貼ってください。 */
 var CONFIG = {
-  API_URL: 'https://script.google.com/macros/s/AKfycbz2O3wPStdHnioWdrUuvA6OfizkZNc1en9GS9TGtxMYNbCOsmV3y4Qdp6-_tbRLtoVObw/exec'
+  API_URL: 'https://script.google.com/macros/s/AKfycbzG6XDvIJoB2NqI15qu_HjtogvTzGtiZWEb6c7fPGNBVruYxgbFhgBnNsHt2kVKYd9m_A/exec',
+  LIFF_ID: '2012029041-NBpt4Wkx'   // LINE連携の回答画面（LIFF）のID
 };
 var LOADERS = {}, CURRENT_PANEL = 'news';
 var INITIAL_HASH = location.hash || '';   // LINEの画面から特定のお知らせ（#news-○○）を開いたとき用
@@ -965,7 +966,7 @@ var admin = (function(){
           createdAt: Number(b.createdAt) || 0,
           lineKind: b.lineKind === 'rsvp' || b.lineKind === 'ack' ? b.lineKind : '',
           deadline: /^\d{4}-\d{2}-\d{2}$/.test(b.deadline || '') ? b.deadline : '',
-          liffId: /^\d{10}-[A-Za-z0-9]{8}$/.test(b.liffId || '') ? b.liffId : ''
+          liffId: /^\d{10}-[A-Za-z0-9]{8}$/.test(b.liffId || '') ? b.liffId : (CONFIG.LIFF_ID || '')
         };
       });
       loaded = true; statusEl.textContent = '';

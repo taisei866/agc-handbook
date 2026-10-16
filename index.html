@@ -368,8 +368,8 @@ img{max-width:100%}
         <div class="link-row"><input id="n-l2-label" maxlength="30" placeholder="ボタンの文字"><input id="n-l2-url" inputmode="url" placeholder="https://"></div>
       </fieldset>
       <div class="field notify-field">
-        <label class="notify-check"><input type="checkbox" id="n-notify" checked> LINEグループにも通知する</label>
-        <small class="hint" id="n-quota">LINEの無料送信数を確認しています…</small>
+        <label class="notify-check"><input type="checkbox" id="n-notify" checked> LINEグループにも知らせる</label>
+        <small class="hint">次にグループで誰かが発言したとき、Botがその返信でカードを出して知らせます（LINEの無料枠は使いません）。</small>
       </div>
       <p class="form-error" id="news-error" role="alert"></p>
       <div class="form-actions">
@@ -495,7 +495,7 @@ img{max-width:100%}
     <div class="sec-head"><h2>印刷室の利用方法</h2></div>
     <p>印刷室は学内の施設を、ご厚意で練習場所として使わせていただいています。ほかの利用者の方への配慮を最優先にしてください。</p>
     <ol class="steps">
-      <li><div><h3>管理人の田村さんに事前申請</h3><p>使いたい日が決まったら、印刷室の管理人の田村さんに事前に申請してください。鍵の受け渡し方法は、申請のときに教えていただけます。</p></div></li>
+      <li><div><h3>管理人の田村さんに事前申請</h3><p>使いたい日が決まったら、印刷室の管理人の田村さんに事前に申請してください。鍵の受け渡し方法は、申請のときに教えていただけます。</p><p>空き状況の確認と予約は、予約サイトからできます。</p><a class="btn" href="https://script.google.com/macros/s/AKfycbzeL15IVnBIIREpI_PCZurA5eiw3WCzMq111ZrQfxIplyXjuKRyu4Q6Ui1v8S1EiKst/exec" target="_blank" rel="noopener">印刷室の予約サイトを開く</a></div></li>
       <li><div><h3>利用できる時間内に使う</h3>
         <dl class="hours">
           <dt>平日</dt><dd>10:00〜21:00</dd>
@@ -635,6 +635,10 @@ img{max-width:100%}
           <button type="button" id="bk-image-clear" class="chip">画像を外す</button>
         </div>
         <small class="hint">大きい画像は自動で縮小して保存されます。</small>
+      </div>
+      <div class="field notify-field">
+        <label class="notify-check"><input type="checkbox" id="bk-notify" checked> LINEグループにも知らせる</label>
+        <small class="hint">次にグループで誰かが発言したとき、Botがその返信でカードを出して知らせます（LINEの無料枠は使いません）。</small>
       </div>
       <p class="form-error" id="bk-error" role="alert"></p>
       <div class="form-actions">
@@ -1106,19 +1110,7 @@ var admin = (function(){
     form.hidden = !show;
     newBtn.hidden = show || !admin.on;
     errEl.textContent = '';
-    if(show){ $('#n-title').focus(); loadQuota(); }
-  }
-  /* LINEの無料送信数（プッシュ通知はグループの人数分の通数を使う） */
-  async function loadQuota(){
-    var q = $('#n-quota'), cb = $('#n-notify');
-    q.textContent = 'LINEの無料送信数を確認しています…'; cb.disabled = false;
-    try{
-      var r = await api.post({action:'lineQuota', password: admin.password});
-      if(!r.available){ q.textContent = '通知できません：' + r.reason; cb.checked = false; cb.disabled = true; return; }
-      if(r.remainingPosts === null){ q.textContent = '通知すると、グループの人数分（' + r.members + '通）を使います。'; return; }
-      q.textContent = '今月あと約' + r.remainingPosts + '回通知できます（1回あたり' + r.members + '通／今月 ' + r.used + '/' + r.limit + '通使用）';
-      if(r.remainingPosts < 1){ cb.checked = false; cb.disabled = true; }
-    }catch(e){ q.textContent = '送信数を確認できませんでした。通知はできる場合があります。'; }
+    if(show){ $('#n-title').focus(); }
   }
   newBtn.addEventListener('click', function(){ openForm(true); });
   $('#n-cancel').addEventListener('click', function(){ form.reset(); clearImage(); openForm(false); });
@@ -1142,13 +1134,14 @@ var admin = (function(){
     if(!title){ errEl.textContent = 'タイトルを入力してください。'; $('#n-title').focus(); return; }
     busy = true; submitBtn.disabled = true; submitBtn.textContent = '投稿しています…';
     try{
-      var notify = $('#n-notify').checked && !$('#n-notify').disabled;
+      var notify = $('#n-notify').checked;
       var res = await api.post({action:'createNews', password: admin.password, category: category, title: title, body: body, links: links, image: pendingImage, notifyLine: notify});
       form.reset(); clearImage(); openForm(false);
       await load();
       if(notify){
-        statusEl.textContent = res.notified && res.notified.ok ? '投稿しました。LINEグループにも通知しました。'
-          : '投稿しました。' + ((res.notified && res.notified.error) || 'LINEへの通知はできませんでした。');
+        statusEl.textContent = res.notified && res.notified.queued
+          ? '投稿しました。次にLINEグループで誰かが発言したときに知らせます。'
+          : '投稿しました。（LINEへのお知らせはできませんでした）';
       }
     }catch(x){
       admin.rejected(x);
@@ -1417,9 +1410,13 @@ var admin = (function(){
     if(!body && !pendingImage){ errEl.textContent = '本文か画像を入れてください。'; $('#bk-body').focus(); return; }
     busy = true; submitBtn.disabled = true; submitBtn.textContent = '投稿しています…';
     try{
-      await api.post({action:'createDiary', password: admin.password, body: body, image: pendingImage});
+      var notify = $('#bk-notify').checked;
+      var res = await api.post({action:'createDiary', password: admin.password, body: body, image: pendingImage, notifyLine: notify});
       form.reset(); clearImage(); errEl.textContent = '';
       await load();
+      if(notify) statusEl.textContent = res.notified && res.notified.queued
+        ? '投稿しました。次にLINEグループで誰かが発言したときに知らせます。'
+        : '投稿しました。（LINEへのお知らせはできませんでした）';
     }catch(x){
       admin.rejected(x);
       errEl.textContent = '投稿できませんでした。' + errText(x);
